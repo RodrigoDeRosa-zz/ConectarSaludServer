@@ -2,14 +2,14 @@ from tornado.ioloop import IOLoop
 
 from src.database.mongo import Mongo
 from src.utils.logging.logger import Logger
-from src.utils.parsing.parsing_utils import ParsingUtils
+from src.utils.argument_parsing.argument_parsing_utils import ArgumentParsingUtils
 from src.utils.setup.app_creator import AppCreator
 from src.utils.setup.server_creator import ServerCreator
 
 
 def start():
-    # Parse command line arguments
-    port, processes, db_data = ParsingUtils.parse_arguments()
+    # Parse command line argument_parsing
+    port, processes, db_data = ArgumentParsingUtils.parse_arguments()
     # Set up logger
     Logger.set_up()
     # Create Tornado application

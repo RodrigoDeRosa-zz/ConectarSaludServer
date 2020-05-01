@@ -1,11 +1,11 @@
 from argparse import ArgumentParser
 
 
-class ParsingUtils:
+class ArgumentParsingUtils:
 
     @classmethod
     def parse_arguments(cls):
-        """ Get environment from program arguments. tornado.options could be used instead of ArgumentParser. """
+        """ Get environment from program argument_parsing. tornado.options could be used instead of ArgumentParser. """
         parser = ArgumentParser()
         # Set up argument values
         parser.add_argument('--proc', nargs='?', default=1, type=int, help='Number of processes. 0 is one per CPU.')
@@ -15,7 +15,7 @@ class ParsingUtils:
         parser.add_argument('--db_name', nargs='?', default='delivery_status', help='MongoDB database name.')
         parser.add_argument('--db_user', nargs='?', default=None, help='MongoDB authentication user.')
         parser.add_argument('--db_password', nargs='?', default=None, help='MongoDB authentication password.')
-        # Get program arguments
+        # Get program argument_parsing
         args = parser.parse_args()
         # Create DB data dictionary
         db_data = dict()
