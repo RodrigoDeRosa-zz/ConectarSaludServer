@@ -11,14 +11,14 @@ class TimeTable:
 
 @dataclass
 class Doctor:
-    dni: str
-    first_name: str
-    last_name: str
-    phone: str
-    email: str
-    specialties: List[str]
-    availability_times: List[TimeTable]
     id: str = None
+    dni: str = None
+    first_name: str = None
+    last_name: str = None
+    phone: str = None
+    email: str = None
+    specialties: List[str] = None
+    availability_times: List[TimeTable] = None
 
     @classmethod
     def fields(cls) -> KeysView:

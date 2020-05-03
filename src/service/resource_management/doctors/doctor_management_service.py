@@ -18,6 +18,17 @@ class DoctorManagementService:
         await DoctorDAO.store(doctor)
 
     @classmethod
+    async def update_information(cls, doctor: Doctor):
+        # Check if doctor to be modified exists
+        if not await DoctorDAO.find_by_id(doctor.id):
+            raise BusinessError(f'There is no doctor with id {doctor.id}.', 400)
+        # Check if doctor with given dni exists
+        if doctor.dni and await DoctorDAO.find_by_dni(doctor):
+            raise BusinessError(f'Doctor with DNI {doctor.dni} already exists.', 409)
+        # Assign id and store new doctor
+        await DoctorDAO.store(doctor)
+
+    @classmethod
     async def retrieve(cls, doctor_id: str) -> Doctor:
         """ Returns the doctor object associated to the given ID, if existent. """
         doctor = await DoctorDAO.find_by_id(doctor_id)

@@ -23,6 +23,18 @@ class DoctorManagementHandler(CustomRequestHandler):
         except RuntimeError:
             self.make_error_response(500, self.INTERNAL_ERROR_MESSAGE)
 
+    async def patch(self, doctor_id):
+        """ Modify an specific doctor's information. """
+        try:
+            doctor = DoctorManagementRequestMapper.map_modification(self._parse_body(), doctor_id)
+            await DoctorManagementService.update_information(doctor)
+            # This service only returns an HTTP 200
+            self.set_status(200)
+        except BusinessError as be:
+            self.make_error_response(be.status, be.message)
+        except RuntimeError:
+            self.make_error_response(500, self.INTERNAL_ERROR_MESSAGE)
+
     async def get(self, doctor_id):
         """ Retrieve doctor information. If parameter is null, all doctors are returned. """
         try:
