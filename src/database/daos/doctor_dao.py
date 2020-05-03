@@ -1,3 +1,5 @@
+from typing import List
+
 from src.database.daos.generic_dao import GenericDAO
 from src.database.mongo import Mongo
 from src.model.doctors.doctor import Doctor
@@ -18,6 +20,12 @@ class DoctorDAO(GenericDAO):
         document = await cls.get_first({'dni': doctor.dni})
         # Get instance directly from its name
         return None if not document else cls.__to_object(document)
+
+    @classmethod
+    async def all(cls) -> List[Doctor]:
+        """ Returns all doctors stored in the database. """
+        documents = await cls.get_all()
+        return [cls.__to_object(document) for document in documents]
 
     @classmethod
     async def store(cls, doctor: Doctor):

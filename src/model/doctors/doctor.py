@@ -1,7 +1,12 @@
 from dataclasses import dataclass
 from typing import List, KeysView
 
-from src.model.doctors.time_table import TimeTable
+
+@dataclass
+class TimeTable:
+    day: str
+    from_time: str
+    to_time: str
 
 
 @dataclass

@@ -1,3 +1,4 @@
+from typing import List
 from uuid import uuid4
 
 from src.database.daos.doctor_dao import DoctorDAO
@@ -15,3 +16,16 @@ class DoctorManagementService:
         # Assign id and store new doctor
         doctor.id = str(uuid4())
         await DoctorDAO.store(doctor)
+
+    @classmethod
+    async def retrieve(cls, doctor_id: str) -> Doctor:
+        """ Returns the doctor object associated to the given ID, if existent. """
+        doctor = await DoctorDAO.find_by_id(doctor_id)
+        if not doctor:
+            raise BusinessError(f'There is no doctor with id {doctor_id}.', 404)
+        return doctor
+
+    @classmethod
+    async def retrieve_all(cls) -> List[Doctor]:
+        """ Returns all doctors stored in the database. """
+        return await DoctorDAO.all()
