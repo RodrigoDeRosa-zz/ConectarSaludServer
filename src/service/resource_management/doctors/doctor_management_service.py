@@ -21,14 +21,14 @@ class DoctorManagementService:
     async def remove(cls, doctor_id: str):
         # Check if doctor with given id exists
         if not await DoctorDAO.find_by_id(doctor_id):
-            raise BusinessError(f'There is no doctor with id {doctor_id}.', 400)
+            raise BusinessError(f'There is no doctor with id {doctor_id}.', 404)
         await DoctorDAO.delete(doctor_id)
 
     @classmethod
     async def update_information(cls, doctor: Doctor):
         # Check if doctor to be modified exists
         if not await DoctorDAO.find_by_id(doctor.id):
-            raise BusinessError(f'There is no doctor with id {doctor.id}.', 400)
+            raise BusinessError(f'There is no doctor with id {doctor.id}.', 404)
         # Check if doctor with given dni exists
         if doctor.dni and await DoctorDAO.find_by_dni(doctor):
             raise BusinessError(f'Doctor with DNI {doctor.dni} already exists.', 409)
