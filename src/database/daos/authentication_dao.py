@@ -7,7 +7,7 @@ class AuthenticationDAO(GenericDAO):
 
     @classmethod
     async def find(cls, auth_data: AuthData) -> AuthData:
-        """ Return the last known status of the given package """
+        """ Return auth data if existent """
         document = await cls.get_first({'_id': auth_data.user_id})
         # Get instance directly from its name
         return None if not document else cls.__to_object(document)

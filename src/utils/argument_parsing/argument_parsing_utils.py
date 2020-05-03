@@ -12,7 +12,7 @@ class ArgumentParsingUtils:
         parser.add_argument('--port', nargs='?', default=5000, type=int, help='Port where application will listen.')
         parser.add_argument('--db_host', nargs='?', default='localhost', help='MongoDB host.')
         parser.add_argument('--db_port', nargs='?', default=27017, type=int, help='MongoDB port.')
-        parser.add_argument('--db_name', nargs='?', default='delivery_status', help='MongoDB database name.')
+        parser.add_argument('--db_name', nargs='?', default='connecting_health', help='MongoDB database name.')
         parser.add_argument('--db_user', nargs='?', default=None, help='MongoDB authentication user.')
         parser.add_argument('--db_password', nargs='?', default=None, help='MongoDB authentication password.')
         # Get program argument_parsing

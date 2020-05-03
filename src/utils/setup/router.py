@@ -1,5 +1,6 @@
 from src.handlers.authentication_handler import AuthenticationHandler
 from src.handlers.health_check_handler import HealthCheckHandler
+from src.handlers.resource_management.doctor_management_handler import DoctorManagementHandler
 
 
 class Router:
@@ -7,7 +8,8 @@ class Router:
     # Dictionary to map route to Tornado RequestHandler subclasses
     ROUTES = {
         '/health/health-check': HealthCheckHandler,
-        '/authenticate': AuthenticationHandler
+        '/authenticate': AuthenticationHandler,
+        '/doctors/?(?P<doctor_id>[^/]+)?': DoctorManagementHandler
     }
 
     @classmethod
