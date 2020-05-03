@@ -9,13 +9,20 @@ from src.model.errors.business_error import BusinessError
 class DoctorManagementService:
 
     @classmethod
-    async def create(cls, doctor: Doctor):
+    async def add(cls, doctor: Doctor):
         # Check if doctor with given dni exists
         if await DoctorDAO.find_by_dni(doctor):
             raise BusinessError(f'Doctor with DNI {doctor.dni} already exists.', 409)
         # Assign id and store new doctor
         doctor.id = str(uuid4())
         await DoctorDAO.store(doctor)
+
+    @classmethod
+    async def remove(cls, doctor_id: str):
+        # Check if doctor with given id exists
+        if not await DoctorDAO.find_by_id(doctor_id):
+            raise BusinessError(f'There is no doctor with id {doctor_id}.', 400)
+        await DoctorDAO.delete(doctor_id)
 
     @classmethod
     async def update_information(cls, doctor: Doctor):

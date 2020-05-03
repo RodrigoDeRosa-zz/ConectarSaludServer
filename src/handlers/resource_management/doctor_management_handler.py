@@ -15,7 +15,7 @@ class DoctorManagementHandler(CustomRequestHandler):
         """ Doctor resource creation endpoint. """
         try:
             doctor = DoctorManagementRequestMapper.map_creation(self._parse_body())
-            await DoctorManagementService.create(doctor)
+            await DoctorManagementService.add(doctor)
             # This service only returns an HTTP 200
             self.set_status(200)
         except BusinessError as be:
@@ -44,6 +44,18 @@ class DoctorManagementHandler(CustomRequestHandler):
             else:
                 response = await DoctorManagementService.retrieve(doctor_id)
                 self.make_response(DoctorManagementResponseMapper.map_doctor(response))
+        except BusinessError as be:
+            self.make_error_response(be.status, be.message)
+        except RuntimeError:
+            self.make_error_response(500, self.INTERNAL_ERROR_MESSAGE)
+
+    async def delete(self, doctor_id):
+        """ Delete the specified doctor from the database. """
+        try:
+            if not doctor_id: raise BusinessError('No doctor ID specified for deletion.')
+            await DoctorManagementService.remove(doctor_id)
+            # This service only returns an HTTP 200
+            self.set_status(200)
         except BusinessError as be:
             self.make_error_response(be.status, be.message)
         except RuntimeError:

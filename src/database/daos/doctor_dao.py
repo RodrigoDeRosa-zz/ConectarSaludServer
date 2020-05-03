@@ -36,6 +36,11 @@ class DoctorDAO(GenericDAO):
         )
 
     @classmethod
+    async def delete(cls, doctor_id: str):
+        """ Remove doctor from database. """
+        await cls.delete_first({'_id': doctor_id})
+
+    @classmethod
     def __to_object(cls, document: dict) -> Doctor:
         return Doctor(
             id=document['_id'],
