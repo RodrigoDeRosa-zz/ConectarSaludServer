@@ -3,7 +3,9 @@ from json import dumps, loads
 from tornado.web import RequestHandler
 
 from src.database.mongo import Mongo
+from src.model.errors.business_error import BusinessError
 from src.utils.compression.gzip_utils import GzipUtils
+from src.utils.mapping.mapping_utils import MappingUtils
 
 
 class CustomRequestHandler(RequestHandler):
@@ -37,3 +39,9 @@ class CustomRequestHandler(RequestHandler):
             # The following is done to accept List responses (Tornado doesn't accept them by default)
             json_response = response if not isinstance(response, str) else loads(response)
             self.write(dumps(json_response))
+
+    def _parse_body(self):
+        try:
+            return MappingUtils.decode_request_body(self.request.body)
+        except RuntimeError:
+            raise BusinessError(f'Invalid request body {self.request.body}', 400)
