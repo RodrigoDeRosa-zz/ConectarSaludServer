@@ -1,8 +1,8 @@
 from src.handlers.custom_request_handler import CustomRequestHandler
 from src.model.errors.business_error import BusinessError
 from src.service.authentication.authentication_service import AuthenticationService
-from src.service.authentication.mappers.AuthenticationRequestMapper import AuthenticationRequestMapper
-from src.service.authentication.mappers.AuthenticationResponseMapper import AuthenticationResponseMapper
+from src.service.authentication.mappers.authentication_request_mapper import AuthenticationRequestMapper
+from src.service.authentication.mappers.authentication_response_mapper import AuthenticationResponseMapper
 
 
 class AuthenticationHandler(CustomRequestHandler):
