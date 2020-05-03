@@ -1,4 +1,5 @@
 from src.database.daos.generic_dao import GenericDAO
+from src.database.mongo import Mongo
 from src.model.authentication.auth_data import AuthData
 
 
@@ -13,4 +14,12 @@ class AuthenticationDAO(GenericDAO):
 
     @classmethod
     def __to_object(cls, document: dict) -> AuthData:
-        return AuthData(user_id=document['_id'], password=document['password'], role=document['role'])
+        return AuthData(
+            user_id=document['_id'],
+            password=document['password'],
+            role=document['role']
+        )
+
+    @classmethod
+    def collection(cls):
+        return Mongo.get().authentication

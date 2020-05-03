@@ -7,12 +7,15 @@ from src.service.authentication.mappers.AuthenticationResponseMapper import Auth
 
 class AuthenticationHandler(CustomRequestHandler):
 
-    SUPPORTED_METHODS = ['GET']
+    SUPPORTED_METHODS = ['POST']
 
     async def post(self):
         try:
-            request = AuthenticationRequestMapper.map(self.__parse_body())
+            # Map JSON body to model object
+            request = AuthenticationRequestMapper.map(self._parse_body())
+            # Fetch needed information
             auth_data = await AuthenticationService.authenticate(request)
+            # Map to JSON for response
             self.make_response(AuthenticationResponseMapper.map(auth_data))
         except BusinessError as be:
             self.make_error_response(be.status, be.message)
