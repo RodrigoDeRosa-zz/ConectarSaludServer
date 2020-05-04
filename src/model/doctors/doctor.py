@@ -16,7 +16,6 @@ class Doctor:
     licence: str = None
     first_name: str = None
     last_name: str = None
-    phone: str = None
     email: str = None
     centers: List[str] = None
     specialties: List[str] = None

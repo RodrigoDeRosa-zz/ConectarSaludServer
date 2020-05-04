@@ -16,7 +16,6 @@ class DoctorManagementRequestMapper:
             licence=request_body['licence'],
             first_name=request_body['first_name'],
             last_name=request_body['last_name'],
-            phone=request_body['phone'],
             email=request_body['email'],
             centers=request_body['centers'],
             specialties=request_body['specialties'],
@@ -34,7 +33,6 @@ class DoctorManagementRequestMapper:
         if 'licence' in request_body: doctor.licence = request_body['licence']
         if 'first_name' in request_body: doctor.first_name = request_body['first_name']
         if 'last_name' in request_body: doctor.last_name = request_body['last_name']
-        if 'phone' in request_body: doctor.phone = request_body['phone']
         if 'email' in request_body: doctor.email = request_body['email']
         if 'centers' in request_body: doctor.centers = request_body['centers']
         if 'specialties' in request_body: doctor.specialties = request_body['specialties']
