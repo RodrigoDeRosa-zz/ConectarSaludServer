@@ -13,6 +13,7 @@ class TimeTable:
 class Doctor:
     id: str = None
     dni: str = None
+    licence: str = None
     first_name: str = None
     last_name: str = None
     phone: str = None
