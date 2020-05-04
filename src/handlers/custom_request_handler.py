@@ -24,17 +24,17 @@ class CustomRequestHandler(RequestHandler):
         response = {'status': status_code, 'message': message}
         self.write(response)
 
-    def make_response(self, response, status_code=200):
+    def make_response(self, response=None, status_code=200):
         """ Create a common success response. """
         self.set_status(status_code)
         # Set default JSON header
         self.set_header('Content-Type', 'application/json')
-        # The following is done to accept List responses (Tornado doesn't accept them by default)
-        json_response = response if not isinstance(response, str) else loads(response)
-        self.write(dumps(json_response))
-
-    def on_finish(self) -> None:
         self.set_header('Access-Control-Allow-Origin', '*')
+        # There are cases with no body
+        if response:
+            # The following is done to accept List responses (Tornado doesn't accept them by default)
+            json_response = response if not isinstance(response, str) else loads(response)
+            self.write(dumps(json_response))
 
     def _parse_body(self):
         try:

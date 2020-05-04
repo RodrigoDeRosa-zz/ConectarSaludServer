@@ -15,7 +15,7 @@ class DoctorManagementHandler(CustomRequestHandler):
             doctor = DoctorManagementRequestMapper.map_creation(self._parse_body())
             await DoctorManagementService.add(doctor)
             # This service only returns an HTTP 200
-            self.set_status(200)
+            self.make_response(status_code=200)
         except BusinessError as be:
             self.make_error_response(be.status, be.message)
         except RuntimeError:
@@ -27,7 +27,7 @@ class DoctorManagementHandler(CustomRequestHandler):
             doctor = DoctorManagementRequestMapper.map_modification(self._parse_body(), doctor_id)
             await DoctorManagementService.update_information(doctor)
             # This service only returns an HTTP 200
-            self.set_status(200)
+            self.make_response(status_code=200)
         except BusinessError as be:
             self.make_error_response(be.status, be.message)
         except RuntimeError:
@@ -53,7 +53,7 @@ class DoctorManagementHandler(CustomRequestHandler):
             if not doctor_id: raise BusinessError('No doctor ID specified for deletion.')
             await DoctorManagementService.remove(doctor_id)
             # This service only returns an HTTP 200
-            self.set_status(200)
+            self.make_response(status_code=200)
         except BusinessError as be:
             self.make_error_response(be.status, be.message)
         except RuntimeError:
