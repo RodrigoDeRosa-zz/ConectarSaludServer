@@ -7,7 +7,7 @@ class HealthCheckHandler(CustomRequestHandler):
     SUPPORTED_METHODS = ['GET']
 
     def get(self):
-        self.make_response('OK')
+        self.set_status(200)
 
     def _log(self):
         # Avoid logging request data on health checks

@@ -30,6 +30,7 @@ class CustomRequestHandler(RequestHandler):
         self.set_status(status_code)
         # Set default JSON header
         self.set_header('Content-Type', 'application/json')
+        self.set_header('Access-Control-Allow-Origin', '*')
         # The following is done to accept List responses (Tornado doesn't accept them by default)
         json_response = response if not isinstance(response, str) else loads(response)
         self.write(dumps(json_response))
