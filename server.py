@@ -3,6 +3,7 @@ from tornado.ioloop import IOLoop
 from src.database.mongo import Mongo
 from src.utils.logging.logger import Logger
 from src.utils.argument_parsing.argument_parsing_utils import ArgumentParsingUtils
+from src.utils.resource_loading.resource_loader import ResourceLoader
 from src.utils.setup.app_creator import AppCreator
 from src.utils.setup.server_creator import ServerCreator
 
@@ -21,6 +22,8 @@ def start():
     Mongo.init(**db_data)
     Mongo.create_indexes()
     app.settings['db'] = Mongo.get()
+    # Create basic database entries
+    #ResourceLoader.load_resources()
     # Start event loop
     Logger(__name__).info(f'Listening on http://localhost:{port}.')
     IOLoop.current().start()

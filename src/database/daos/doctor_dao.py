@@ -54,7 +54,6 @@ class DoctorDAO(GenericDAO):
             dni=document['dni'],
             first_name=document['first_name'],
             last_name=document['last_name'],
-            phone=document['phone'],
             email=document['email'],
             specialties=document['specialties'],
             availability_times=document['availability_times']
@@ -67,7 +66,6 @@ class DoctorDAO(GenericDAO):
         if doctor.dni: document['dni'] = doctor.dni
         if doctor.first_name: document['first_name'] = doctor.first_name
         if doctor.last_name: document['last_name'] = doctor.last_name
-        if doctor.phone: document['phone'] = doctor.phone
         if doctor.email: document['email'] = doctor.email
         if doctor.specialties: document['specialties'] = doctor.specialties
         if doctor.availability_times: document['availability_times'] = doctor.availability_times
