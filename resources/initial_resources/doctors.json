@@ -1,0 +1,28 @@
+[
+  {
+	"dni": "14365833",
+	"licence": "12345",
+	"first_name": "Alfredo",
+	"last_name": "Perez",
+	"phone": "+54 11 43229812",
+	"email": "aperez@gmail.com",
+	"specialties": [
+		"CARDIOLOGÍA"
+	],
+	"centers": [
+		"Hospital Pirovano"
+	],
+	"availability_times": [
+      {
+		"day": "monday",
+		"from_time": "10:00",
+		"to_time": "18:00"
+	  },
+      {
+		"day": "tuesday",
+		"from_time": "10:00",
+		"to_time": "18:00"
+      }
+	]
+  }
+]
