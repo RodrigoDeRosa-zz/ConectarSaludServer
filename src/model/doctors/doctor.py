@@ -17,6 +17,7 @@ class Doctor:
     last_name: str = None
     phone: str = None
     email: str = None
+    centers: List[str] = None
     specialties: List[str] = None
     availability_times: List[TimeTable] = None
 
