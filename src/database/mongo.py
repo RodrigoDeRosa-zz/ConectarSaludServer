@@ -22,7 +22,9 @@ class Mongo:
     def create_indexes(cls):
         """ Create indexes for all collections. """
         # Imports need to be here to avoid circular import issues.
+        from src.database.daos.doctor_dao import DoctorDAO
         cls.get_logger().info('Configuring database indexes...')
+        DoctorDAO.create_indexes(cls.DB)
 
     @classmethod
     def set(cls, db):

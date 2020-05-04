@@ -1,6 +1,8 @@
-class AuthData:
+from dataclasses import dataclass
 
-    def __init__(self, user_id: str, password: str, role: str = None):
-        self.user_id = user_id
-        self.password = password
-        self.role = role
+
+@dataclass
+class AuthData:
+    user_id: str
+    password: str
+    role: str = None

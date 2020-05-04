@@ -48,14 +48,12 @@ class GenericDAO:
                                                           return_document=ReturnDocument.AFTER)
 
     @classmethod
-    async def update_first(cls, query, updated_fields_dict):
+    async def delete_first(cls, query):
         """
-        Update first entry matching given query with the given dictionary.
-            :returns Updated document
+        Delete first element matching the given query from collection.
+            :returns An instance of DeleteResult (dr.delete_count returns the amount of deleted documents)
         """
-        return await cls.collection().find_one_and_update(filter=query,
-                                                          update={'$set': updated_fields_dict},
-                                                          return_document=ReturnDocument.AFTER)
+        return await cls.collection().find_one_and_delete(query)
 
     @classmethod
     def collection(cls):

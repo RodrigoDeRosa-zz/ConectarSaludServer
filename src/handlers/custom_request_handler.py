@@ -30,15 +30,9 @@ class CustomRequestHandler(RequestHandler):
         self.set_status(status_code)
         # Set default JSON header
         self.set_header('Content-Type', 'application/json')
-        # Compress response if needed and possible
-        if response and GzipUtils.accepts_compression(self.request.headers):
-            self.set_header('Content-Encoding', 'gzip')
-            response = GzipUtils.compress(str(response))
-            self.write(response)
-        else:
-            # The following is done to accept List responses (Tornado doesn't accept them by default)
-            json_response = response if not isinstance(response, str) else loads(response)
-            self.write(dumps(json_response))
+        # The following is done to accept List responses (Tornado doesn't accept them by default)
+        json_response = response if not isinstance(response, str) else loads(response)
+        self.write(dumps(json_response))
 
     def _parse_body(self):
         try:
