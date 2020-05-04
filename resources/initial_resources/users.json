@@ -1,5 +1,12 @@
 [
   {
-    "user_id": ""
+    "user_id": "39334455",
+    "password": "c8174d34c6e85dde713b411014b683462ae4b79a929b60fbadab744743d985ef",
+    "role": "affiliate"
+  },
+  {
+    "user_id": "12345678",
+    "password": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "role": "affiliate"
   }
 ]
