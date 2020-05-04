@@ -22,6 +22,13 @@ class DoctorDAO(GenericDAO):
         return None if not document else cls.__to_object(document)
 
     @classmethod
+    async def find_by_licence(cls, doctor: Doctor) -> Doctor:
+        """ Return doctor with given licence if existent. """
+        document = await cls.get_first({'licence': doctor.licence})
+        # Get instance directly from its name
+        return None if not document else cls.__to_object(document)
+
+    @classmethod
     async def all(cls) -> List[Doctor]:
         """ Returns all doctors stored in the database. """
         documents = await cls.get_all()
@@ -70,6 +77,7 @@ class DoctorDAO(GenericDAO):
     @classmethod
     def create_indexes(cls, db):
         db.doctors.create_index('dni', unique=True)
+        db.doctors.create_index('licence', unique=True)
 
     @classmethod
     def collection(cls):

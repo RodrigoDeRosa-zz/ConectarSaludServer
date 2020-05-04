@@ -13,6 +13,9 @@ class DoctorManagementService:
         # Check if doctor with given dni exists
         if await DoctorDAO.find_by_dni(doctor):
             raise BusinessError(f'Doctor with DNI {doctor.dni} already exists.', 409)
+        # Check if doctor with given licence exists
+        if await DoctorDAO.find_by_licence(doctor):
+            raise BusinessError(f'Doctor with licence {doctor.licence} already exists.', 409)
         # Assign id and store new doctor
         doctor.id = str(uuid4())
         await DoctorDAO.store(doctor)
@@ -32,6 +35,9 @@ class DoctorManagementService:
         # Check if doctor with given dni exists
         if doctor.dni and await DoctorDAO.find_by_dni(doctor):
             raise BusinessError(f'Doctor with DNI {doctor.dni} already exists.', 409)
+        # Check if doctor with given licence exists
+        if doctor.dni and await DoctorDAO.find_by_licence(doctor):
+            raise BusinessError(f'Doctor with licence {doctor.licence} already exists.', 409)
         # Assign id and store new doctor
         await DoctorDAO.store(doctor)
 
