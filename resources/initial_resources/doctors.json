@@ -1,6 +1,7 @@
 [
   {
 	"dni": "14365833",
+	"licence": "12345",
 	"first_name": "Alfredo",
 	"last_name": "Perez",
 	"phone": "+54 11 43229812",
@@ -23,5 +24,5 @@
 		"to_time": "18:00"
       }
 	]
-}
+  }
 ]
