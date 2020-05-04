@@ -52,6 +52,7 @@ class DoctorDAO(GenericDAO):
         return Doctor(
             id=document['_id'],
             dni=document['dni'],
+            licence=document['licence'],
             first_name=document['first_name'],
             last_name=document['last_name'],
             email=document['email'],
@@ -64,6 +65,7 @@ class DoctorDAO(GenericDAO):
         document = dict()
         # Add only existent fields to the document. This way we can create and update with the same code
         if doctor.dni: document['dni'] = doctor.dni
+        if doctor.licence: document['licence'] = doctor.licence
         if doctor.first_name: document['first_name'] = doctor.first_name
         if doctor.last_name: document['last_name'] = doctor.last_name
         if doctor.email: document['email'] = doctor.email
