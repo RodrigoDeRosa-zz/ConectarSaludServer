@@ -4,6 +4,8 @@ from src.handlers.custom_request_handler import CustomRequestHandler
 class HealthCheckHandler(CustomRequestHandler):
     """ Handler for health checks. """
 
+    SUPPORTED_METHODS = ['OPTIONS', 'GET']
+
     def get(self):
         self.set_status(200)
 
