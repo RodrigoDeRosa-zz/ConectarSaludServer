@@ -60,6 +60,3 @@ class DoctorManagementHandler(CustomRequestHandler):
             self.make_error_response(be.status, be.message)
         except RuntimeError:
             self.make_error_response(500, self.INTERNAL_ERROR_MESSAGE)
-
-    def options(self, doctor_id):
-        self.make_response(status_code=204)
