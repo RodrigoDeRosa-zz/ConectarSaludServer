@@ -38,7 +38,7 @@ class CustomRequestHandler(RequestHandler):
             json_response = response if not isinstance(response, str) else loads(response)
             self.write(dumps(json_response))
 
-    async def options(self):
+    def options(self):
         self.make_response(status_code=200)
 
     def _parse_body(self):
