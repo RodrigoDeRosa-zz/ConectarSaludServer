@@ -23,7 +23,7 @@ def start():
     Mongo.create_indexes()
     app.settings['db'] = Mongo.get()
     # Create basic database entries
-    if env != 'docker': ResourceLoader.load_resources()
+    ResourceLoader.load_resources(env)
     # Start event loop
     Logger(__name__).info(f'Listening on http://localhost:{port}.')
     IOLoop.current().start()

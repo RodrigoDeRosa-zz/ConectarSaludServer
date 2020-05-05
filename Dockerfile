@@ -10,5 +10,6 @@ COPY --from=build /root/.local /root/.local
 # Copy all needed files to container's root directory
 COPY server.py /
 ADD /src /src
+ADD /resources /resources
 # Run app with this command.
 CMD ["python", "/server.py", "--db_host", "mongodb", "--env", "docker"]

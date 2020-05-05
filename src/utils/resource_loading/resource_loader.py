@@ -16,10 +16,13 @@ class ResourceLoader:
 
     DOCTORS = 'doctors.json'
     USERS = 'users.json'
+    FOLDER = 'resources/initial_resources/'
+    PATH = None
 
     @classmethod
-    def load_resources(cls):
+    def load_resources(cls, env):
         """ Load resources to database for every non-existent collection. """
+        cls.PATH = f'{abspath(join(dirname(__file__), "../../.."))}{"/" if env != "docker" else ""}{cls.FOLDER}'
         IOLoop.current().add_timeout(0, cls.__load_doctors)
         IOLoop.current().add_timeout(0, cls.__load_users)
 
@@ -29,7 +32,7 @@ class ResourceLoader:
         if await AuthenticationDAO.get_all({}): return
         # Only load file if there are no users in the database
         Logger(cls.__name__).info('Creating basic authentication database entries...')
-        file_name = f'{abspath(join(dirname(__file__), "../../.."))}/resources/initial_resources/{cls.USERS}'
+        file_name = f'{cls.PATH}{cls.USERS}'
         with open(file_name) as fd:
             users = load(fd)
         # Add every doctor to the database
@@ -42,7 +45,7 @@ class ResourceLoader:
         if await DoctorDAO.all(): return
         # Only load file if there are no doctors in the database
         Logger(cls.__name__).info('Creating basic doctor database entries...')
-        file_name = f'{abspath(join(dirname(__file__), "../../.."))}/resources/initial_resources/{cls.DOCTORS}'
+        file_name = f'{cls.PATH}{cls.DOCTORS}'
         with open(file_name) as fd:
             doctors = load(fd)
         # Add every doctor to the database
