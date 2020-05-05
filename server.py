@@ -10,7 +10,7 @@ from src.utils.setup.server_creator import ServerCreator
 
 def start():
     # Parse command line argument_parsing
-    port, processes, db_data = ArgumentParsingUtils.parse_arguments()
+    port, processes, db_data, env = ArgumentParsingUtils.parse_arguments()
     # Set up logger
     Logger.set_up()
     # Create Tornado application
@@ -23,7 +23,7 @@ def start():
     Mongo.create_indexes()
     app.settings['db'] = Mongo.get()
     # Create basic database entries
-    ResourceLoader.load_resources()
+    if env != 'docker': ResourceLoader.load_resources()
     # Start event loop
     Logger(__name__).info(f'Listening on http://localhost:{port}.')
     IOLoop.current().start()

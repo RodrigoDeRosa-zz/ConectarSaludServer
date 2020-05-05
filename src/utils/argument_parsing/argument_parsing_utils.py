@@ -10,6 +10,7 @@ class ArgumentParsingUtils:
         # Set up argument values
         parser.add_argument('--proc', nargs='?', default=1, type=int, help='Number of processes. 0 is one per CPU.')
         parser.add_argument('--port', nargs='?', default=5000, type=int, help='Port where application will listen.')
+        parser.add_argument('--env', nargs='?', default='root', help='Environment [root, docker].')
         parser.add_argument('--db_host', nargs='?', default='localhost', help='MongoDB host.')
         parser.add_argument('--db_port', nargs='?', default=27017, type=int, help='MongoDB port.')
         parser.add_argument('--db_name', nargs='?', default='connecting_health', help='MongoDB database name.')
@@ -24,4 +25,4 @@ class ArgumentParsingUtils:
         db_data['db_name'] = args.db_name
         db_data['user'] = args.db_user
         db_data['password'] = args.db_password
-        return args.port, args.proc, db_data
+        return args.port, args.proc, db_data, args.env

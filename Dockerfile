@@ -11,4 +11,4 @@ COPY --from=build /root/.local /root/.local
 COPY server.py /
 ADD /src /src
 # Run app with this command.
-CMD ["python", "/server.py", "--db_host", "mongodb"]
+CMD ["python", "/server.py", "--db_host", "mongodb", "--env", "docker"]
