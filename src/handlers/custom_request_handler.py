@@ -30,6 +30,7 @@ class CustomRequestHandler(RequestHandler):
         # Set default JSON header
         self.set_header('Content-Type', 'application/json')
         self.set_header('Access-Control-Allow-Origin', '*')
+        self.set_header('Allow', 'OPTIONS, GET, HEAD, POST, PATCH, PUT')
         # There are cases with no body
         if response:
             # The following is done to accept List responses (Tornado doesn't accept them by default)
