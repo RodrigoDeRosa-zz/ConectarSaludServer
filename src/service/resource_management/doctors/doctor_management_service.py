@@ -30,13 +30,14 @@ class DoctorManagementService:
     @classmethod
     async def update_information(cls, doctor: Doctor):
         # Check if doctor to be modified exists
-        if not await DoctorDAO.find_by_id(doctor.id):
+        db_doctor = await DoctorDAO.find_by_id(doctor.id)
+        if not db_doctor:
             raise BusinessError(f'There is no doctor with id {doctor.id}.', 404)
         # Check if doctor with given dni exists
-        if doctor.dni and await DoctorDAO.find_by_dni(doctor):
+        if doctor.dni and db_doctor.dni != doctor.dni and await DoctorDAO.find_by_dni(doctor):
             raise BusinessError(f'Doctor with DNI {doctor.dni} already exists.', 409)
         # Check if doctor with given licence exists
-        if doctor.dni and await DoctorDAO.find_by_licence(doctor):
+        if doctor.licence and db_doctor.licence != doctor.licence and await DoctorDAO.find_by_licence(doctor):
             raise BusinessError(f'Doctor with licence {doctor.licence} already exists.', 409)
         # Assign id and store new doctor
         await DoctorDAO.store(doctor)
