@@ -9,7 +9,7 @@ from src.service.resource_management.doctors.mappers.doctor_management_response_
 
 class DoctorManagementHandler(CustomRequestHandler):
 
-    SUPPORTED_METHODS = ['OPTIONS', 'GET', 'POST', 'PATCH']
+    SUPPORTED_METHODS = ['OPTIONS', 'GET', 'POST', 'PATCH', 'DELETE']
 
     async def post(self, doctor_id):
         """ Doctor resource creation endpoint. """
