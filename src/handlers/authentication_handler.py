@@ -1,3 +1,4 @@
+from src.database.daos.authentication_dao import AuthenticationDAO
 from src.handlers.custom_request_handler import CustomRequestHandler
 from src.model.errors.business_error import BusinessError
 from src.service.authentication.authentication_service import AuthenticationService
@@ -7,7 +8,7 @@ from src.service.authentication.mappers.authentication_response_mapper import Au
 
 class AuthenticationHandler(CustomRequestHandler):
 
-    SUPPORTED_METHODS = ['OPTIONS', 'POST']
+    SUPPORTED_METHODS = ['OPTIONS', 'POST', 'PUT']
 
     async def post(self):
         try:
@@ -21,3 +22,8 @@ class AuthenticationHandler(CustomRequestHandler):
             self.make_error_response(be.status, be.message)
         except RuntimeError:
             self.make_error_response(500, self.INTERNAL_ERROR_MESSAGE)
+
+    async def put(self):
+        """ TODO -> Remove this endpoint. """
+        await AuthenticationDAO.insert(self._parse_body())
+        self.make_response(self._parse_body())
