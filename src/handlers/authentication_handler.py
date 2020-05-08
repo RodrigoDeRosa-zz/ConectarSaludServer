@@ -7,7 +7,7 @@ from src.service.authentication.mappers.authentication_response_mapper import Au
 
 class AuthenticationHandler(CustomRequestHandler):
 
-    SUPPORTED_METHODS = ['POST']
+    SUPPORTED_METHODS = ['OPTIONS', 'POST']
 
     async def post(self):
         try:
