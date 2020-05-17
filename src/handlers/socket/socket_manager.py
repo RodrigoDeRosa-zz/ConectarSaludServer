@@ -22,4 +22,4 @@ async def connect(sid, environ):
 async def print_message(sid, message):
     decoded = MappingUtils.map_socket_message(message)
     Logger(sid).info(decoded)
-    await SocketManager.SIO.emit('message', 'Received!')
+    await SocketManager.SIO.emit('message', 'Received!', room=sid)
