@@ -1,4 +1,4 @@
-parameterized
+python-socketio
 tornado
 motor
 pymongo

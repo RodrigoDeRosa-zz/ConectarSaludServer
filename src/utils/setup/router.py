@@ -1,6 +1,7 @@
 from src.handlers.authentication_handler import AuthenticationHandler
 from src.handlers.health_check_handler import HealthCheckHandler
 from src.handlers.resource_management.doctor_management_handler import DoctorManagementHandler
+from src.handlers.socket.socket_manager import SocketManager
 
 
 class Router:
@@ -9,7 +10,8 @@ class Router:
     ROUTES = {
         '/health/health-check': HealthCheckHandler,
         '/authenticate': AuthenticationHandler,
-        '/doctors/?(?P<doctor_id>[^/]+)?': DoctorManagementHandler
+        '/doctors/?(?P<doctor_id>[^/]+)?': DoctorManagementHandler,
+        r'/socket.io/': SocketManager.handler()
     }
 
     @classmethod
