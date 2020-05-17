@@ -2,6 +2,7 @@ from src.handlers.authentication_handler import AuthenticationHandler
 from src.handlers.health_check_handler import HealthCheckHandler
 from src.handlers.resource_management.affiliate_consultation_management_handler import \
     AffiliateConsultationManagementHandler
+from src.handlers.resource_management.doctor_consultation_management_handler import DoctorConsultationManagementHandler
 from src.handlers.resource_management.doctor_management_handler import DoctorManagementHandler
 from src.handlers.socket.socket_manager import SocketManager
 
@@ -13,6 +14,7 @@ class Router:
         '/health/health-check': HealthCheckHandler,
         '/authenticate': AuthenticationHandler,
         '/doctors/?(?P<doctor_id>[^/]+)?': DoctorManagementHandler,
+        '/doctors/(?P<doctor_id>[^/]+)/consultations': DoctorConsultationManagementHandler,
         '/affiliates/(?P<affiliate_dni>[^/]+)/consultations/?(?P<consultation_id>[^/]+)?':
             AffiliateConsultationManagementHandler,
         r'/socket.io/': SocketManager.handler()

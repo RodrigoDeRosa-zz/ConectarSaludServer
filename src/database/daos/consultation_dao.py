@@ -1,6 +1,6 @@
 from src.database.daos.generic_dao import GenericDAO
 from src.database.mongo import Mongo
-from src.model.consultations.consultation import Consultation
+from src.model.consultations.consultation import Consultation, ConsultationStatus
 
 
 class ConsultationDAO(GenericDAO):
@@ -10,6 +10,12 @@ class ConsultationDAO(GenericDAO):
         """ Return consultation with given id if existent. """
         document = await cls.get_first({'_id': consultation_id})
         # Get instance directly from its name
+        return None if not document else cls.__to_object(document)
+
+    @classmethod
+    async def consultation_waiting_call(cls, doctor_id: str) -> Consultation:
+        """ Returns consultation in progress for given doctor if it exists. """
+        document = await cls.get_first({'doctor_id': doctor_id, 'status': ConsultationStatus.WAITING_CALL.value})
         return None if not document else cls.__to_object(document)
 
     @classmethod
@@ -25,6 +31,8 @@ class ConsultationDAO(GenericDAO):
         return Consultation(
             id=document['_id'],
             affiliate_dni=document['affiliate_dni'],
+            status=ConsultationStatus[document['status']],
+            creation_date=document['creation_date'],
             doctor_id=document.get('doctor_id'),
             call_id=document.get('call_id'),
             score=document.get('score'),
@@ -38,6 +46,8 @@ class ConsultationDAO(GenericDAO):
         document = dict()
         # Add only existent fields to the document. This way we can create and update with the same code
         if consultation.affiliate_dni: document['affiliate_dni'] = consultation.affiliate_dni
+        if consultation.status: document['status'] = consultation.status.value
+        if consultation.creation_date: document['creation_date'] = consultation.creation_date
         if consultation.doctor_id: document['doctor_id'] = consultation.doctor_id
         if consultation.call_id: document['call_id'] = consultation.call_id
         if consultation.score: document['score'] = consultation.score
@@ -46,6 +56,12 @@ class ConsultationDAO(GenericDAO):
         if consultation.indications: document['indications'] = consultation.indications
         # Return create/update document
         return document
+
+    @classmethod
+    def create_indexes(cls, db):
+        db.doctors.create_index('doctor_id')
+        db.doctors.create_index('affiliate_dni')
+        db.doctors.create_index('status')
 
     @classmethod
     def collection(cls):

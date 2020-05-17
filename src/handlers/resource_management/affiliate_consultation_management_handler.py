@@ -13,7 +13,7 @@ class AffiliateConsultationManagementHandler(CustomRequestHandler):
         """ Creates a new consultation for the given affiliate. """
         try:
             consultation_id = await ConsultationService.create_for_affiliate(affiliate_dni)
-            self.make_response({'consultation_id': consultation_id}, status_code=200)
+            self.make_response({'consultation_id': consultation_id})
         except BusinessError as be:
             self.make_error_response(be.status, be.message)
         except RuntimeError:
@@ -35,7 +35,7 @@ class AffiliateConsultationManagementHandler(CustomRequestHandler):
         """ Returns relevant information for the affiliate about the consultation. """
         try:
             consultation, doctor = await ConsultationService.get_consultation(affiliate_dni, consultation_id)
-            self.make_response(ConsultationResponseMapper.map_for_affiliate(consultation, doctor), status_code=200)
+            self.make_response(ConsultationResponseMapper.map_for_affiliate(consultation, doctor))
         except BusinessError as be:
             self.make_error_response(be.status, be.message)
         except RuntimeError:

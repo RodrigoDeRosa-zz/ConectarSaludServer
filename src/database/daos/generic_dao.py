@@ -29,6 +29,20 @@ class GenericDAO:
         return documents
 
     @classmethod
+    async def get_sorted(cls, query=None, projection_dict=None, sort_list=None, limit=1):
+        """
+        Get all entries matching the given query. If there is no query, full collection is returned.
+        An example of `sort_list` is [('call_millis', pymongo.ASCENDING)]
+            :returns List of full documents
+        """
+        sort_list = [('_id', 1)] if not sort_list else sort_list
+        cursor = cls.collection().find({} if query is None else query, projection_dict).sort(sort_list).limit(limit)
+        documents = []
+        while await cursor.fetch_next:
+            documents.append(cursor.next_object())
+        return documents
+
+    @classmethod
     async def insert(cls, element):
         """
         Insert given element into collection.
