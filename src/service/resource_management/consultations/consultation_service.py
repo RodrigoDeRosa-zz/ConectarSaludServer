@@ -29,7 +29,7 @@ class ConsultationService:
         """ Returns a call ID if there is any for the given doctor. """
         if not await DoctorDAO.find_by_id(doctor_id):
             raise BusinessError(f'There is no doctor with ID {doctor_id}.', 404)
-        consultation = await ConsultationDAO.consultation_waiting_call(doctor_id)
+        consultation = await ConsultationDAO.next_consultation_waiting_call(doctor_id)
         # There may be no affiliate to talk with at the moment
         if not consultation:
             raise BusinessError(f'There is no consultation waiting for the given doctor.', 404)
@@ -55,7 +55,7 @@ class ConsultationService:
         await ConsultationDAO.store(consultation)
 
     @classmethod
-    async def get_consultation(cls, affiliate_dni: str, consultation_id: str) -> Tuple[Consultation, Doctor]:
+    async def affiliate_consultation(cls, affiliate_dni: str, consultation_id: str) -> Tuple[Consultation, Doctor]:
         """ Get consultation and check if affiliate and consultation are related. """
         consultation = await cls.__get_consultation_if_exists(affiliate_dni, consultation_id)
         # Check that the consultation belongs to the affiliate
@@ -68,6 +68,19 @@ class ConsultationService:
         doctor = Doctor(first_name='Fernando', last_name='Acero')
         # Return both objects for mapping
         return consultation, doctor
+
+    @classmethod
+    async def next_consultation(cls, doctor_id):
+        """ Returns a consultation that is waiting for a doctor. """
+        consultation = await ConsultationDAO.next_consultation_waiting_doctor()
+        if not consultation:
+            raise BusinessError('There are no consultations waiting for a doctor.', 404)
+        # Update information
+        consultation.doctor_id = doctor_id
+        consultation.status = ConsultationStatus.WAITING_CALL
+        await ConsultationDAO.store(consultation)
+        # Return id
+        return consultation.id
 
     @staticmethod
     async def __get_consultation_if_exists(affiliate_dni: str, consultation_id: str) -> Consultation:

@@ -1,3 +1,5 @@
+import pymongo
+
 from src.database.daos.generic_dao import GenericDAO
 from src.database.mongo import Mongo
 from src.model.consultations.consultation import Consultation, ConsultationStatus
@@ -13,9 +15,19 @@ class ConsultationDAO(GenericDAO):
         return None if not document else cls.__to_object(document)
 
     @classmethod
-    async def consultation_waiting_call(cls, doctor_id: str) -> Consultation:
+    async def next_consultation_waiting_call(cls, doctor_id: str) -> Consultation:
         """ Returns consultation in progress for given doctor if it exists. """
         document = await cls.get_first({'doctor_id': doctor_id, 'status': ConsultationStatus.WAITING_CALL.value})
+        return None if not document else cls.__to_object(document)
+
+    @classmethod
+    async def next_consultation_waiting_doctor(cls) -> Consultation:
+        """ Returns consultation waiting to have a doctor assigned. """
+        documents = await cls.get_sorted(
+            query={'status': ConsultationStatus.WAITING_DOCTOR.value},
+            sort_list=[('creation_date', pymongo.ASCENDING)]
+        )
+        document = None if not documents else documents[0]
         return None if not document else cls.__to_object(document)
 
     @classmethod
@@ -61,7 +73,7 @@ class ConsultationDAO(GenericDAO):
     def create_indexes(cls, db):
         db.doctors.create_index('doctor_id')
         db.doctors.create_index('affiliate_dni')
-        db.doctors.create_index('status')
+        db.doctors.create_index('creation_date')
 
     @classmethod
     def collection(cls):

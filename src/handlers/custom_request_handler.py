@@ -41,6 +41,14 @@ class CustomRequestHandler(RequestHandler):
     def options(self, *args, **kwargs):
         self.make_response(status_code=204)
 
+    async def wrap_handling(self, handling_method, **kwargs):
+        try:
+            await handling_method(**kwargs)
+        except BusinessError as be:
+            self.make_error_response(be.status, be.message)
+        except RuntimeError:
+            self.make_error_response(500, self.INTERNAL_ERROR_MESSAGE)
+
     def _parse_body(self):
         try:
             return MappingUtils.decode_request_body(self.request.body)

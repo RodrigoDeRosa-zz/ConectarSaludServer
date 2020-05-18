@@ -9,7 +9,7 @@ class DoctorManagementRequestMapper:
         # Check if the request contains all needed fields
         for field in Doctor.fields():
             if field not in request_body and field != 'id':
-                raise BusinessError(f'Invalid resource creation request. Missing field {field}.')
+                raise BusinessError(f'Invalid resource creation request. Missing field {field}.', 400)
         # Create model object
         return Doctor(
             dni=request_body['dni'],
