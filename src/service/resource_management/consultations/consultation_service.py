@@ -5,7 +5,8 @@ from typing import Tuple
 from src.database.daos.affiliate_dao import AffiliateDAO
 from src.database.daos.consultation_dao import ConsultationDAO
 from src.database.daos.doctor_dao import DoctorDAO
-from src.model.consultations.consultation import Consultation, ConsultationScore, ConsultationStatus
+from src.model.consultations.consultation import Consultation, ConsultationScore, ConsultationStatus, \
+    ConsultationOpinion
 from src.model.doctors.doctor import Doctor
 from src.model.errors.business_error import BusinessError
 
@@ -48,16 +49,28 @@ class ConsultationService:
     async def put_scoring_data(cls, affiliate_dni: str, consultation_id: str, score: ConsultationScore):
         """ Update a consultation with the affiliate's score. """
         # Get consultation to update
-        consultation = await cls.__get_consultation_if_exists(affiliate_dni, consultation_id)
+        consultation = await cls.__get_affiliate_consultation(affiliate_dni, consultation_id)
         # Update and store
         consultation.score = score.points
         consultation.score_opinion = score.opinion
         await ConsultationDAO.store(consultation)
 
     @classmethod
+    async def put_doctors_opinion(cls, doctor_id: str, consultation_id: str, opinion: ConsultationOpinion):
+        """ Update a consultation with prescription and indications. """
+        consultation = await cls.__get_doctor_consultation(doctor_id, consultation_id)
+        # Check that the consultation belongs to the doctor
+        if not consultation.doctor_id == doctor_id:
+            raise BusinessError(f'Failed to match doctor ID to consultation ID.', 400)
+        # Update and store
+        consultation.prescription = opinion.prescription
+        consultation.indications = opinion.indications
+        await ConsultationDAO.store(consultation)
+
+    @classmethod
     async def affiliate_consultation(cls, affiliate_dni: str, consultation_id: str) -> Tuple[Consultation, Doctor]:
         """ Get consultation and check if affiliate and consultation are related. """
-        consultation = await cls.__get_consultation_if_exists(affiliate_dni, consultation_id)
+        consultation = await cls.__get_affiliate_consultation(affiliate_dni, consultation_id)
         # Check that the consultation belongs to the affiliate
         if not consultation.affiliate_dni == affiliate_dni:
             raise BusinessError(f'Failed to match affiliate DNI to consultation ID.', 400)
@@ -83,9 +96,19 @@ class ConsultationService:
         return consultation.id
 
     @staticmethod
-    async def __get_consultation_if_exists(affiliate_dni: str, consultation_id: str) -> Consultation:
+    async def __get_affiliate_consultation(affiliate_dni: str, consultation_id: str) -> Consultation:
         if not await AffiliateDAO.find(affiliate_dni):
             raise BusinessError(f'There is no affiliate with DNI {affiliate_dni}.', 404)
+        # Get consultation to update
+        consultation = await ConsultationDAO.find(consultation_id)
+        if not consultation:
+            raise BusinessError(f'There is no consultation with ID {consultation_id}.', 404)
+        return consultation
+
+    @staticmethod
+    async def __get_doctor_consultation(doctor_id: str, consultation_id: str) -> Consultation:
+        if not await DoctorDAO.find_by_id(doctor_id):
+            raise BusinessError(f'There is no doctor with ID {doctor_id}.', 404)
         # Get consultation to update
         consultation = await ConsultationDAO.find(consultation_id)
         if not consultation:

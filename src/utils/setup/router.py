@@ -16,7 +16,7 @@ class Router:
         '/authenticate': AuthenticationHandler,
         '/doctors/?(?P<doctor_id>[^/]+)?': DoctorManagementHandler,
         '/consultations/?(?P<consultation_id>[^/]+)?': ConsultationManagementHandler,
-        '/doctors/(?P<doctor_id>[^/]+)/consultations': DoctorConsultationManagementHandler,
+        '/doctors/(?P<doctor_id>[^/]+)/consultations/?(?P<consultation_id>[^/]+)?': DoctorConsultationManagementHandler,
         '/affiliates/(?P<affiliate_dni>[^/]+)/consultations/?(?P<consultation_id>[^/]+)?':
             AffiliateConsultationManagementHandler,
         r'/socket.io/': SocketManager.handler()

@@ -1,6 +1,12 @@
 from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum, auto
+from enum import Enum
+
+
+@dataclass
+class ConsultationOpinion:
+    prescription: str = None
+    indications: str = None
 
 
 class ConsultationStatus(Enum):
