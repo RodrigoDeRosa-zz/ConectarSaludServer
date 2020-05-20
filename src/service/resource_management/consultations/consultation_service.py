@@ -77,11 +77,12 @@ class ConsultationService:
         # Check that the consultation belongs to the affiliate
         if not consultation.affiliate_dni == affiliate_dni:
             raise BusinessError(f'Failed to match affiliate DNI to consultation ID.', 400)
+        # TODO -> remove this if when full flow is implemented
         # Get consultation doctor
-        # TODO -> Change this when the full flow is implemented
-        doctor = await DoctorDAO.find_by_id('TODO')
-        # TODO -> remove this when full flow is implemented
-        doctor = Doctor(first_name='Fernando', last_name='Acero')
+        if consultation.doctor_id:
+            doctor = await DoctorDAO.find_by_id(consultation.doctor_id)
+        else:
+            doctor = Doctor(first_name='Fernando', last_name='Acero')
         # Return both objects for mapping
         return consultation, doctor
 
