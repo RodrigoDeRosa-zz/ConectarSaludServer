@@ -33,10 +33,12 @@ class ConsultationService:
         # Set socket ID and update
         consultation.socket_id = socket_id
         await ConsultationDAO.store(consultation)
+        # TODO -> Add to queue at this point in the future
 
     @classmethod
     async def next_consultation(cls, doctor_id):
         """ Returns a consultation that is waiting for a doctor. """
+        # TODO -> This should be automatic and triggered by the queue in the future
         if not await DoctorDAO.find_by_id(doctor_id):
             raise BusinessError(f'There are no doctors with ID {doctor_id}.', 404)
         consultation = await ConsultationDAO.next_consultation_waiting_doctor()
