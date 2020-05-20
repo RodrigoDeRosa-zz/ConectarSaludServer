@@ -51,6 +51,7 @@ class ConsultationDAO(GenericDAO):
             score_opinion=document.get('score_opinion'),
             prescription=document.get('prescription'),
             indications=document.get('indications'),
+            socket_id=document.get('socket_id')
         )
 
     @classmethod
@@ -66,6 +67,7 @@ class ConsultationDAO(GenericDAO):
         if consultation.score_opinion: document['score_opinion'] = consultation.score_opinion
         if consultation.prescription: document['prescription'] = consultation.prescription
         if consultation.indications: document['indications'] = consultation.indications
+        if consultation.socket_id: document['socket_id'] = consultation.socket_id
         # Return create/update document
         return document
 

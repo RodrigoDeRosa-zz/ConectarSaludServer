@@ -28,6 +28,7 @@ class Consultation:
     score_opinion: str = None
     prescription: str = None
     indications: str = None
+    socket_id: str = None
 
 
 @dataclass
