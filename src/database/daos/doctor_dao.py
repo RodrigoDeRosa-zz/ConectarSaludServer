@@ -15,9 +15,9 @@ class DoctorDAO(GenericDAO):
         return None if not document else cls.__to_object(document)
 
     @classmethod
-    async def find_by_dni(cls, doctor: Doctor) -> Doctor:
+    async def find_by_dni(cls, doctor_dni: str) -> Doctor:
         """ Return doctor with given dni if existent. """
-        document = await cls.get_first({'dni': doctor.dni})
+        document = await cls.get_first({'dni': doctor_dni})
         # Get instance directly from its name
         return None if not document else cls.__to_object(document)
 

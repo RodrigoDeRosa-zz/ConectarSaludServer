@@ -22,6 +22,6 @@ class AuthenticationHandler(CustomRequestHandler):
         # Map JSON body to model object
         request = AuthenticationRequestMapper.map(self._parse_body())
         # Fetch needed information
-        auth_data = await AuthenticationService.authenticate(request)
+        auth_data, user_info = await AuthenticationService.authenticate(request)
         # Map to JSON for response
-        self.make_response(AuthenticationResponseMapper.map(auth_data))
+        self.make_response(AuthenticationResponseMapper.map(auth_data, user_info))
