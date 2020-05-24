@@ -6,6 +6,7 @@ from src.database.daos.affiliate_dao import AffiliateDAO
 from src.database.daos.consultation_dao import ConsultationDAO
 from src.database.daos.doctor_dao import DoctorDAO
 from src.handlers.socket.socket_manager import SocketManager
+from src.model.affiliates.affiliate import Affiliate
 from src.model.consultations.consultation import Consultation, ConsultationScore, ConsultationStatus, \
     ConsultationOpinion
 from src.model.doctors.doctor import Doctor
@@ -36,7 +37,7 @@ class ConsultationService:
         # TODO -> Add to queue at this point in the future
 
     @classmethod
-    async def next_consultation(cls, doctor_id):
+    async def next_consultation(cls, doctor_id) -> Tuple[str, Affiliate]:
         """ Returns a consultation that is waiting for a doctor. """
         # TODO -> This should be automatic and triggered by the queue in the future
         if not await DoctorDAO.find_by_id(doctor_id):
@@ -48,8 +49,10 @@ class ConsultationService:
         consultation.doctor_id = doctor_id
         consultation.status = ConsultationStatus.WAITING_CALL
         await ConsultationDAO.store(consultation)
+        # Get associated affiliate
+        affiliate = await AffiliateDAO.find(consultation.affiliate_dni)
         # Return id
-        return consultation.id
+        return consultation.id, affiliate
 
     @classmethod
     async def start_call(cls, doctor_id: str) -> str:

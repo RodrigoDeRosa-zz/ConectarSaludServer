@@ -6,3 +6,5 @@ class Affiliate:
     dni: str
     first_name: str
     last_name: str
+    plan: str
+    id: str

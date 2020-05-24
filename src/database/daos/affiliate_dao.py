@@ -39,6 +39,8 @@ class AffiliateDAO(GenericDAO):
             dni=document['_id'],
             first_name=document['first_name'],
             last_name=document['last_name'],
+            plan=document['plan'],
+            id=document['id']
         )
 
     @classmethod
@@ -47,6 +49,8 @@ class AffiliateDAO(GenericDAO):
         # Add only existent fields to the document. This way we can create and update with the same code
         if affiliate.first_name: document['first_name'] = affiliate.first_name
         if affiliate.last_name: document['last_name'] = affiliate.last_name
+        if affiliate.plan: document['plan'] = affiliate.plan
+        if affiliate.id: document['id'] = affiliate.id
         # Return create/update document
         return document
 

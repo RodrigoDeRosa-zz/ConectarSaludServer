@@ -2,16 +2,22 @@
   {
     "dni": "39334455",
     "first_name": "Facundo",
-    "last_name": "Guerrero"
+    "last_name": "Guerrero",
+    "plan": "Basico",
+    "id": "CS0123"
   },
   {
     "dni": "12345678",
     "first_name": "John",
-    "last_name": "Doe"
+    "last_name": "Doe",
+    "plan": "Basico",
+    "id": "CS0231"
   },
   {
     "dni": "39211048",
     "first_name": "Marcos",
-    "last_name": "Schapira"
+    "last_name": "Schapira",
+    "plan": "Basico",
+    "id": "CS1341"
   }
 ]

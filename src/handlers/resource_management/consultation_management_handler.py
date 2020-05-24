@@ -1,6 +1,8 @@
 from src.handlers.custom_request_handler import CustomRequestHandler
 from src.model.errors.business_error import BusinessError
 from src.service.resource_management.consultations.consultation_service import ConsultationService
+from src.service.resource_management.consultations.mappers.consultation_response_mapper import \
+    ConsultationResponseMapper
 
 
 class ConsultationManagementHandler(CustomRequestHandler):
@@ -14,5 +16,5 @@ class ConsultationManagementHandler(CustomRequestHandler):
 
     async def __next_consultation(self, doctor_id):
         """ Return a consultation in need of a doctor. """
-        consultation_id = await ConsultationService.next_consultation(doctor_id)
-        self.make_response({'consultation_id': consultation_id})
+        consultation_id, affiliate = await ConsultationService.next_consultation(doctor_id)
+        self.make_response(ConsultationResponseMapper.map_for_doctor(consultation_id, affiliate))
