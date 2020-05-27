@@ -99,6 +99,7 @@ class ConsultationService:
         # Update and store
         consultation.score = score.points
         consultation.score_opinion = score.opinion
+        consultation.status = ConsultationStatus.FINISHED
         await ConsultationDAO.store(consultation)
 
     @classmethod
@@ -111,6 +112,7 @@ class ConsultationService:
         # Update and store
         consultation.prescription = opinion.prescription
         consultation.indications = opinion.indications
+        consultation.status = ConsultationStatus.FINISHED
         await ConsultationDAO.store(consultation)
 
     @classmethod
