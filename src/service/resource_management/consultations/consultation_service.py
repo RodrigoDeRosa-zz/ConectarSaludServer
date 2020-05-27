@@ -59,6 +59,10 @@ class ConsultationService:
         """ Returns a call ID if there is any for the given doctor. """
         if not await DoctorDAO.find_by_id(doctor_id):
             raise BusinessError(f'There is no doctor with ID {doctor_id}.', 404)
+        # There could be a consultation in progress (in which case we would return that same call_id)
+        consultation = await ConsultationDAO.consultation_in_progress(doctor_id)
+        if consultation: return consultation.call_id
+        # If it is a new consultation, then we need to create the call
         consultation = await ConsultationDAO.next_consultation_waiting_call(doctor_id)
         # There may be no affiliate to talk with at the moment
         if not consultation:
