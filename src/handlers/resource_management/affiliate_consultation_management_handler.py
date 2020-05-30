@@ -30,7 +30,8 @@ class AffiliateConsultationManagementHandler(CustomRequestHandler):
         consultation = await ConsultationService.create_for_affiliate(affiliate_dni)
         self.make_response(ConsultationResponseMapper.map_consultation(consultation))
 
-    async def __cancel_affiliate_consultation(self, affiliate_dni, consultation_id):
+    @staticmethod
+    async def __cancel_affiliate_consultation(affiliate_dni, consultation_id):
         """ Cancel a consultation for the given affiliate. """
         await ConsultationService.cancel_consultation(affiliate_dni, consultation_id)
 
