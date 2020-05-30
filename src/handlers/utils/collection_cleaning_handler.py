@@ -11,4 +11,4 @@ class CollectionCleaningHandler(CustomRequestHandler):
 
     @staticmethod
     async def __clean_collection(collection_name: str):
-        Mongo.get()[collection_name].remove({})
+        await Mongo.get()[collection_name].remove({})
