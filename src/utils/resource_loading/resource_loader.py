@@ -68,5 +68,11 @@ class ResourceLoader:
         # Add every affiliate to the database
         for affiliate in affiliates:
             await AffiliateDAO.store(
-                Affiliate(dni=affiliate['dni'], first_name=affiliate['first_name'], last_name=affiliate['last_name'])
+                Affiliate(
+                    id=affiliate['id'],
+                    dni=affiliate['dni'],
+                    first_name=affiliate['first_name'],
+                    last_name=affiliate['last_name'],
+                    plan=affiliate['plan']
+                )
             )

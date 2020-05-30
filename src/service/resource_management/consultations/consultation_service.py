@@ -11,6 +11,7 @@ from src.model.consultations.consultation import Consultation, ConsultationScore
     ConsultationOpinion
 from src.model.doctors.doctor import Doctor
 from src.model.errors.business_error import BusinessError
+from src.service.queue.queue_manager import QueueManager
 
 
 class ConsultationService:
@@ -37,7 +38,7 @@ class ConsultationService:
         # Set socket ID and update
         consultation.socket_id = socket_id
         await ConsultationDAO.store(consultation)
-        # TODO -> Add to queue at this point in the future
+        await QueueManager.enqueue(consultation)
 
     @classmethod
     async def next_consultation(cls, doctor_id) -> Tuple[str, Affiliate]:
@@ -45,7 +46,7 @@ class ConsultationService:
         # TODO -> This should be automatic and triggered by the queue in the future
         if not await DoctorDAO.find_by_id(doctor_id):
             raise BusinessError(f'There are no doctors with ID {doctor_id}.', 404)
-        consultation = await ConsultationDAO.next_consultation_waiting_doctor()
+        consultation = await QueueManager.pop()
         if not consultation:
             raise BusinessError('There are no consultations waiting for a doctor.', 404)
         # Update information

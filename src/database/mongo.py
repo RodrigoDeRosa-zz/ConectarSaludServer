@@ -26,11 +26,13 @@ class Mongo:
         from src.database.daos.affiliate_dao import AffiliateDAO
         from src.database.daos.authentication_dao import AuthenticationDAO
         from src.database.daos.consultation_dao import ConsultationDAO
+        from src.database.daos.queue_dao import QueueDAO
         cls.get_logger().info('Configuring database indexes...')
         DoctorDAO.create_indexes(cls.DB)
         AffiliateDAO.create_indexes(cls.DB)
         ConsultationDAO.create_indexes(cls.DB)
         AuthenticationDAO.create_indexes(cls.DB)
+        QueueDAO.create_indexes(cls.DB)
 
     @classmethod
     def set(cls, db):
