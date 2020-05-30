@@ -26,10 +26,11 @@ class QueueDAO(GenericDAO):
 
     @classmethod
     def __to_object(cls, document: dict) -> QueueableData:
+        priority = ConsultationPriority.COMMON
         return QueueableData(
             id=document['_id'],
             socket_id=document['socket_id'],
-            priority=ConsultationPriority[document.get('priority', 0)],
+            priority=priority,
             creation_time=document['creation_date']
         )
 
