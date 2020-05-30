@@ -1,6 +1,6 @@
 from heapq import heappush, heappop
 
-from typing import List
+from typing import List, Optional
 
 from src.model.consultations.consultation import QueueableData
 
@@ -22,6 +22,9 @@ class ConsultationQueue:
         """ Add consultation in priority queue. """
         heappush(self.queue, queueable_data)
 
-    def dequeue(self) -> QueueableData:
+    def dequeue(self) -> Optional[QueueableData]:
         """ Take next consultation. """
-        return heappop(self.queue)
+        try:
+            return heappop(self.queue)
+        except IndexError:
+            return None

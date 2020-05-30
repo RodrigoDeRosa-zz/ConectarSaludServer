@@ -1,3 +1,5 @@
+from typing import Optional
+
 from src.database.daos.consultation_dao import ConsultationDAO
 from src.database.daos.queue_dao import QueueDAO
 from src.handlers.socket.socket_manager import SocketManager
@@ -24,11 +26,13 @@ class QueueManager:
         await cls.__notify_single_affiliate(queueable_data, cls.__QUEUE.index_of(queueable_data))
 
     @classmethod
-    async def pop(cls) -> Consultation:
+    async def pop(cls) -> Optional[Consultation]:
         """ Return the next consultation to be handled. """
         if not cls.__QUEUE: await cls.__create_queue()
         # Remove from memory and database
         queueable_data = cls.__QUEUE.dequeue()
+        # Return None if there is no consultation to handle
+        if not queueable_data: return None
         await QueueDAO.remove(queueable_data.id)
         # Notify current affiliate that they're next
         await cls.__notify_single_affiliate(queueable_data)
