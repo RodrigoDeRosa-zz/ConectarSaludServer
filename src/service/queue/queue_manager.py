@@ -20,6 +20,8 @@ class QueueManager:
         cls.__QUEUE.enqueue(queueable_data)
         # Persist in DB
         await QueueDAO.store(queueable_data)
+        # Notify user approximate waiting time
+        await cls.__notify_single_affiliate(queueable_data, cls.__QUEUE.index_of(queueable_data))
 
     @classmethod
     async def pop(cls) -> Consultation:

@@ -12,6 +12,9 @@ class ConsultationQueue:
         for element in queue:
             heappush(self.queue, element)
 
+    def index_of(self, queueable_data: QueueableData):
+        return self.queue.index(queueable_data)
+
     def __iter__(self):
         return list.__iter__(self.queue)
 
