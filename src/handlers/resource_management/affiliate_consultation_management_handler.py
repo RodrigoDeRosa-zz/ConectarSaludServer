@@ -11,6 +11,10 @@ class AffiliateConsultationManagementHandler(CustomRequestHandler):
     async def post(self, affiliate_dni, consultation_id):
         await self.wrap_handling(self.__create_affiliate_consultation, **{'affiliate_dni': affiliate_dni})
 
+    async def delete(self, affiliate_dni, consultation_id):
+        params = {'affiliate_dni': affiliate_dni, 'consultation_id': consultation_id}
+        await self.wrap_handling(self.__cancel_affiliate_consultation, **params)
+
     async def patch(self, affiliate_dni, consultation_id):
         params = {'affiliate_dni': affiliate_dni, 'consultation_id': consultation_id}
         await self.wrap_handling(self.__set_consultation_score, **params)
@@ -25,6 +29,10 @@ class AffiliateConsultationManagementHandler(CustomRequestHandler):
         """ Creates a new consultation for the given affiliate. """
         consultation = await ConsultationService.create_for_affiliate(affiliate_dni)
         self.make_response(ConsultationResponseMapper.map_consultation(consultation))
+
+    async def __cancel_affiliate_consultation(self, affiliate_dni, consultation_id):
+        """ Cancel a consultation for the given affiliate. """
+        await ConsultationService.cancel_consultation(affiliate_dni, consultation_id)
 
     async def __set_consultation_score(self, affiliate_dni, consultation_id):
         """ Creates a new consultation for the given affiliate. """

@@ -32,6 +32,13 @@ class ConsultationService:
         return consultation
 
     @classmethod
+    async def cancel_consultation(cls, affiliate_dni: str, consultation_id: str):
+        """ Cancels a consultation that is waiting for a doctor. """
+        consultation = await cls.__get_affiliate_consultation(affiliate_dni, consultation_id)
+        consultation.status = ConsultationStatus.FINISHED
+        await ConsultationDAO.store(consultation)
+
+    @classmethod
     async def link_socket_to_consultation(cls, consultation_id: str, socket_id: str):
         """ Stores a relationship between a socket and a consultation. """
         consultation = await ConsultationDAO.find(consultation_id)
