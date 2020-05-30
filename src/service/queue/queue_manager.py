@@ -58,6 +58,11 @@ class QueueManager:
         cls.__QUEUE = ConsultationQueue(queue)
 
     @classmethod
+    def clear(cls):
+        """ Utility method to clean memory queue. """
+        cls.__QUEUE.clear()
+
+    @classmethod
     def __to_queueable_data(cls, consultation: Consultation) -> QueueableData:
         return QueueableData(
             id=consultation.id,

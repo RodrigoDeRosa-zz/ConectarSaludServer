@@ -1,5 +1,6 @@
 from src.database.mongo import Mongo
 from src.handlers.custom_request_handler import CustomRequestHandler
+from src.service.queue.queue_manager import QueueManager
 
 
 class CollectionCleaningHandler(CustomRequestHandler):
@@ -12,3 +13,4 @@ class CollectionCleaningHandler(CustomRequestHandler):
     @staticmethod
     async def __clean_collection(collection_name: str):
         await Mongo.get()[collection_name].delete_many({})
+        if collection_name == 'queue': QueueManager.clear()

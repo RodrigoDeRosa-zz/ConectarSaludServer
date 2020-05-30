@@ -28,3 +28,7 @@ class ConsultationQueue:
             return heappop(self.queue)
         except IndexError:
             return None
+
+    def clear(self):
+        """ Utility method """
+        self.queue = []
