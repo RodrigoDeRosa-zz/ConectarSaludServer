@@ -30,7 +30,7 @@ class QueueDAO(GenericDAO):
             id=document['_id'],
             socket_id=document['socket_id'],
             priority=ConsultationPriority(document.get('priority', 0)),
-            creation_time=document['creation_date']
+            creation_time=document['creation_time']
         )
 
     @classmethod
