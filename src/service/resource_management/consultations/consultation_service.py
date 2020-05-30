@@ -16,16 +16,19 @@ from src.model.errors.business_error import BusinessError
 class ConsultationService:
 
     @classmethod
-    async def create_for_affiliate(cls, affiliate_dni: str) -> str:
+    async def create_for_affiliate(cls, affiliate_dni: str) -> Consultation:
         """ Creates a new consultation for the given affiliate and returns it's id. """
         if not await AffiliateDAO.find(affiliate_dni):
             raise BusinessError(f'There is no affiliate with DNI {affiliate_dni}.', 404)
+        # If there is an ongoing call, return it's id
+        consultation = await ConsultationDAO.affiliate_consultation_in_progress(affiliate_dni)
+        if consultation: return consultation
         # Create new consultation and store
         consultation_id = str(uuid.uuid4())
         consultation = Consultation(id=consultation_id, affiliate_dni=affiliate_dni, creation_date=datetime.now())
         await ConsultationDAO.store(consultation)
         # Return id for response
-        return consultation_id
+        return consultation
 
     @classmethod
     async def link_socket_to_consultation(cls, consultation_id: str, socket_id: str):
@@ -60,7 +63,7 @@ class ConsultationService:
         if not await DoctorDAO.find_by_id(doctor_id):
             raise BusinessError(f'There is no doctor with ID {doctor_id}.', 404)
         # There could be a consultation in progress (in which case we would return that same call_id)
-        consultation = await ConsultationDAO.consultation_in_progress(doctor_id)
+        consultation = await ConsultationDAO.doctor_consultation_in_progress(doctor_id)
         if consultation: return consultation.call_id
         # If it is a new consultation, then we need to create the call
         consultation = await ConsultationDAO.next_consultation_waiting_call(doctor_id)

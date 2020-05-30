@@ -23,8 +23,8 @@ class AffiliateConsultationManagementHandler(CustomRequestHandler):
 
     async def __create_affiliate_consultation(self, affiliate_dni):
         """ Creates a new consultation for the given affiliate. """
-        consultation_id = await ConsultationService.create_for_affiliate(affiliate_dni)
-        self.make_response({'consultation_id': consultation_id})
+        consultation = await ConsultationService.create_for_affiliate(affiliate_dni)
+        self.make_response(ConsultationResponseMapper.map_consultation(consultation))
 
     async def __set_consultation_score(self, affiliate_dni, consultation_id):
         """ Creates a new consultation for the given affiliate. """

@@ -6,6 +6,13 @@ from src.model.doctors.doctor import Doctor
 class ConsultationResponseMapper:
 
     @staticmethod
+    def map_consultation(consultation: Consultation) -> dict:
+        response = {'consultation_id': consultation.id}
+        if consultation.call_id:
+            response['call_id'] = consultation.call_id
+        return response
+
+    @staticmethod
     def map_for_affiliate(consultation: Consultation, doctor: Doctor) -> dict:
         return {
             'doctor_first_name': doctor.first_name,

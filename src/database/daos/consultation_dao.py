@@ -15,9 +15,14 @@ class ConsultationDAO(GenericDAO):
         return None if not document else cls.__to_object(document)
 
     @classmethod
-    async def consultation_in_progress(cls, doctor_id: str) -> Consultation:
+    async def doctor_consultation_in_progress(cls, doctor_id: str) -> Consultation:
         """ Returns consultation in progress for given doctor if it exists. """
         document = await cls.get_first({'doctor_id': doctor_id, 'status': ConsultationStatus.IN_PROGRESS.value})
+        return None if not document else cls.__to_object(document)
+
+    @classmethod
+    async def affiliate_consultation_in_progress(cls, affiliate_dni: str) -> Consultation:
+        document = await cls.get_first({'affiliate_dni': affiliate_dni, 'status': ConsultationStatus.IN_PROGRESS.value})
         return None if not document else cls.__to_object(document)
 
     @classmethod
