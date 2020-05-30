@@ -45,6 +45,7 @@ class ConsultationScore:
 @dataclass
 class QueueableData:
     id: str
+    socket_id: str
     creation_time: datetime
     priority: ConsultationPriority
 

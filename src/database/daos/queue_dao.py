@@ -28,6 +28,7 @@ class QueueDAO(GenericDAO):
     def __to_object(cls, document: dict) -> QueueableData:
         return QueueableData(
             id=document['_id'],
+            socket_id=document['socket_id'],
             priority=ConsultationPriority[document.get('priority', 0)],
             creation_time=document['creation_date']
         )
@@ -36,8 +37,9 @@ class QueueDAO(GenericDAO):
     def __to_document(cls, queueable_data: QueueableData) -> dict:
         return {
             '_id': queueable_data.id,
+            'socket_id': queueable_data.socket_id,
             'priority': queueable_data.priority.value,
-            'creation_time': queueable_data.creation_time
+            'creation_time': queueable_data.creation_time,
         }
 
     @classmethod

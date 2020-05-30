@@ -1,12 +1,15 @@
 from src.database.daos.consultation_dao import ConsultationDAO
 from src.database.daos.queue_dao import QueueDAO
+from src.handlers.socket.socket_manager import SocketManager
 from src.model.consultations.consultation import Consultation, QueueableData
 from src.service.queue.consultation_queue import ConsultationQueue
+from src.utils.scheduling.scheduler import Scheduler
 
 
 class QueueManager:
 
     __QUEUE: ConsultationQueue = None
+    CONSULTATION_MINUTES = 10
 
     @classmethod
     async def enqueue(cls, consultation: Consultation):
@@ -25,9 +28,22 @@ class QueueManager:
         # Remove from memory and database
         queueable_data = cls.__QUEUE.dequeue()
         await QueueDAO.remove(queueable_data.id)
-        # TODO -> Schedule new waiting time
+        # Notify current affiliate that they're next
+        await cls.__notify_single_affiliate(queueable_data)
+        # Notify all enqueued affiliates of updated waiting time
+        Scheduler.run_in_millis(cls.__notify_affiliates)
         # Return related consultation object
         return await ConsultationDAO.find(queueable_data.id)
+
+    @classmethod
+    async def __notify_affiliates(cls):
+        """ Send approximate remaining time to every affiliate via socket. """
+        for index, value in enumerate(cls.__QUEUE):
+            await cls.__notify_single_affiliate(value, index + 1)
+
+    @classmethod
+    async def __notify_single_affiliate(cls, queueable_data: QueueableData, index: int = 0):
+        await SocketManager.notify_remaining_time(index * cls.CONSULTATION_MINUTES, queueable_data.socket_id)
 
     @classmethod
     async def __create_queue(cls):
@@ -39,6 +55,7 @@ class QueueManager:
     def __to_queueable_data(cls, consultation: Consultation) -> QueueableData:
         return QueueableData(
             id=consultation.id,
+            socket_id=consultation.socket_id,
             creation_time=consultation.creation_date,
             priority=consultation.priority
         )

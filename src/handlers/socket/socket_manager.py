@@ -10,7 +10,8 @@ class SocketManager:
     SIO = socketio.AsyncServer(async_mode='tornado')
 
     USER_EVENT_TYPE = 'waiting_call'
-    SERVER_EVENT_TYPE = 'call_started'
+    CALL_STARTED_EVENT_TYPE = 'call_started'
+    REMAINING_TIME_EVENT_TYPE = 'remaining_time'
 
     @classmethod
     def handler(cls):
@@ -34,4 +35,10 @@ class SocketManager:
     async def notify_call_start(cls, call_id, sid):
         """ Notify user with call id to join Agora video conference. """
         Logger('Socket Manager').info(f'Emitting call ID through socket {sid}.')
-        await cls.SIO.emit(cls.SERVER_EVENT_TYPE, dumps({'call_id': call_id}), room=sid)
+        await cls.SIO.emit(cls.CALL_STARTED_EVENT_TYPE, dumps({'call_id': call_id}), room=sid)
+
+    @classmethod
+    async def notify_remaining_time(cls, remaining_time, sid):
+        """ Notifies the user the approximate remaining time. """
+        Logger('Socket Manager').info(f'Emitting remaining time through socket {sid}.')
+        await cls.SIO.emit(cls.REMAINING_TIME_EVENT_TYPE, dumps({'remaining_time': remaining_time}), room=sid)
