@@ -20,7 +20,7 @@ class Router:
         '/doctors/(?P<doctor_id>[^/]+)/consultations/?(?P<consultation_id>[^/]+)?': DoctorConsultationManagementHandler,
         '/affiliates/(?P<affiliate_dni>[^/]+)/consultations/?(?P<consultation_id>[^/]+)?':
             AffiliateConsultationManagementHandler,
-        '/utils/collections/clear/(?P<affiliate_dni>[^/]+)': CollectionCleaningHandler,
+        '/utils/collections/clear/(?P<collection_name>[^/]+)': CollectionCleaningHandler,
         r'/socket.io/': SocketManager.handler()
     }
 
