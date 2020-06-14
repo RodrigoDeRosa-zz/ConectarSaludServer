@@ -1,0 +1,84 @@
+{
+  "Cabeza": [
+    "Dolor de cabeza",
+    "Fiebre",
+    "Fiebre mayor a 39 grados",
+    "Hinchazón",
+    "Hormigueo",
+    "Debilidad músculos",
+    "Pérdida de conocimiento"
+  ],
+  "Oidos": [
+	"Dolor de oídos",
+	"Pérdida de audición",
+	"Oído tapado",
+	"Zumbidos",
+	"Picor de oído"
+  ],
+  "Ojos": [
+	"Dolor de ojos",
+	"Ojos llorosos",
+	"Picor de ojos",
+	"Ojos rojos",
+	"Pérdida de visión",
+	"Ojos secos"
+  ],
+  "Boca": [
+	"Boca seca",
+	"Dolor de muelas",
+	"Dolor de encías",
+	"Dificultad para masticar",
+	"Pérdida del gusto"
+  ],
+  "Garganta": [
+	"Dolor de garganta",
+	"Tos",
+	"Roja",
+	"Bulto"
+  ],
+  "Pecho": [
+	"Dolor de pecho",
+	"Problemas respiratorios",
+	"Acidez",
+	"Palpitaciones",
+	"Ritmo cardíaco rápido"
+  ],
+  "Brazos": [
+	"Dolor de brazos",
+	"Adormecimiento de brazos",
+	"Movimiento disminuido de brazos",
+	"Imflamación en el brazo"
+  ],
+  "Abdomen": [
+    "Dolor de abdomen"
+  ],
+  "Espalda": [
+	"Dolor de espalda"
+  ],
+  "Genitales": [
+	"Sangrado genital",
+	"Secreción genital",
+	"Problema sexual",
+	"Infección urinaria"
+  ],
+  "Piernas": [
+	"Dolor en cadera",
+	"Dolor en piernas o pies",
+	"Dolor al mover piernas o pies",
+	"Dolor en articulaciones",
+	"Lesión"
+  ],
+  "Otros": [
+    "Cansancio",
+	"Vómitos",
+	"Diarrea",
+	"Malestar general",
+	"Problema en la piel",
+	"Alergia",
+	"Presión arterial alta",
+	"Colesterol",
+	"Depresión",
+	"Dieta",
+	"Otros"
+  ]
+}

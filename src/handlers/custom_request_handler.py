@@ -41,9 +41,17 @@ class CustomRequestHandler(RequestHandler):
     def options(self, *args, **kwargs):
         self.make_response(status_code=204)
 
-    async def wrap_handling(self, handling_method, **kwargs):
+    async def wrap_coroutine(self, coroutine, **kwargs):
         try:
-            await handling_method(**kwargs)
+            await coroutine(**kwargs)
+        except BusinessError as be:
+            self.make_error_response(be.status, be.message)
+        except RuntimeError:
+            self.make_error_response(500, self.INTERNAL_ERROR_MESSAGE)
+
+    def wrap_method(self, method, **kwargs):
+        try:
+            method(**kwargs)
         except BusinessError as be:
             self.make_error_response(be.status, be.message)
         except RuntimeError:

@@ -10,7 +10,7 @@ class ConsultationManagementHandler(CustomRequestHandler):
     async def get(self, consultation_id):
         doctor_id = self.get_argument('doctor', None, True)
         if not doctor_id: raise BusinessError('Missing query parameter "doctor".', 400)
-        await self.wrap_handling(self.__next_consultation, **{'doctor_id': doctor_id})
+        await self.wrap_coroutine(self.__next_consultation, **{'doctor_id': doctor_id})
 
     """ Handling methods. """
 

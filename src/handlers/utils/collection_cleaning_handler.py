@@ -6,7 +6,7 @@ from src.service.queue.queue_manager import QueueManager
 class CollectionCleaningHandler(CustomRequestHandler):
 
     async def post(self, collection_name):
-        await self.wrap_handling(self.__clean_collection, **{'collection_name': collection_name})
+        await self.wrap_coroutine(self.__clean_collection, **{'collection_name': collection_name})
 
     """ Handling methods """
 

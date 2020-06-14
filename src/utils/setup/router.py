@@ -6,6 +6,7 @@ from src.handlers.resource_management.consultation_management_handler import Con
 from src.handlers.resource_management.doctor_consultation_management_handler import DoctorConsultationManagementHandler
 from src.handlers.resource_management.doctor_management_handler import DoctorManagementHandler
 from src.handlers.socket.socket_manager import SocketManager
+from src.handlers.symptoms_handler import SymptomsHandler
 from src.handlers.utils.collection_cleaning_handler import CollectionCleaningHandler
 
 
@@ -21,6 +22,7 @@ class Router:
         '/affiliates/(?P<affiliate_dni>[^/]+)/consultations/?(?P<consultation_id>[^/]+)?':
             AffiliateConsultationManagementHandler,
         '/utils/collections/clear/(?P<collection_name>[^/]+)': CollectionCleaningHandler,
+        '/symptoms': SymptomsHandler,
         r'/socket.io/': SocketManager.handler()
     }
 

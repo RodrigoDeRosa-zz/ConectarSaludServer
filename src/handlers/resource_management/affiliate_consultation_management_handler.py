@@ -9,19 +9,19 @@ from src.service.resource_management.consultations.mappers.consultation_scoring_
 class AffiliateConsultationManagementHandler(CustomRequestHandler):
 
     async def post(self, affiliate_dni, consultation_id):
-        await self.wrap_handling(self.__create_affiliate_consultation, **{'affiliate_dni': affiliate_dni})
+        await self.wrap_coroutine(self.__create_affiliate_consultation, **{'affiliate_dni': affiliate_dni})
 
     async def delete(self, affiliate_dni, consultation_id):
         params = {'affiliate_dni': affiliate_dni, 'consultation_id': consultation_id}
-        await self.wrap_handling(self.__cancel_affiliate_consultation, **params)
+        await self.wrap_coroutine(self.__cancel_affiliate_consultation, **params)
 
     async def patch(self, affiliate_dni, consultation_id):
         params = {'affiliate_dni': affiliate_dni, 'consultation_id': consultation_id}
-        await self.wrap_handling(self.__set_consultation_score, **params)
+        await self.wrap_coroutine(self.__set_consultation_score, **params)
 
     async def get(self, affiliate_dni, consultation_id):
         params = {'affiliate_dni': affiliate_dni, 'consultation_id': consultation_id}
-        await self.wrap_handling(self.__retrieve, **params)
+        await self.wrap_coroutine(self.__retrieve, **params)
 
     """ Handling methods. """
 

@@ -7,11 +7,11 @@ from src.service.resource_management.consultations.mappers.consultation_update_r
 class DoctorConsultationManagementHandler(CustomRequestHandler):
 
     async def get(self, doctor_id, consultation_id):
-        await self.wrap_handling(self.__start_call, **{'doctor_id': doctor_id})
+        await self.wrap_coroutine(self.__start_call, **{'doctor_id': doctor_id})
 
     async def patch(self, doctor_id, consultation_id):
         params = {'doctor_id': doctor_id, 'consultation_id': consultation_id}
-        await self.wrap_handling(self.__update_consultation, **params)
+        await self.wrap_coroutine(self.__update_consultation, **params)
 
     """ Handling methods """
 

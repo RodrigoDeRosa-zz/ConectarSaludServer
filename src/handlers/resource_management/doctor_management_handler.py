@@ -12,16 +12,16 @@ class DoctorManagementHandler(CustomRequestHandler):
     SUPPORTED_METHODS = ['OPTIONS', 'GET', 'POST', 'PATCH', 'DELETE']
 
     async def post(self, doctor_id):
-        await self.wrap_handling(self.__add_doctor, **{})
+        await self.wrap_coroutine(self.__add_doctor, **{})
 
     async def patch(self, doctor_id):
-        await self.wrap_handling(self.__update_doctor, **{'doctor_id': doctor_id})
+        await self.wrap_coroutine(self.__update_doctor, **{'doctor_id': doctor_id})
 
     async def get(self, doctor_id):
-        await self.wrap_handling(self.__retrieve, **{'doctor_id': doctor_id})
+        await self.wrap_coroutine(self.__retrieve, **{'doctor_id': doctor_id})
 
     async def delete(self, doctor_id):
-        await self.wrap_handling(self.__remove_doctor, **{'doctor_id': doctor_id})
+        await self.wrap_coroutine(self.__remove_doctor, **{'doctor_id': doctor_id})
 
     """ Handling methods """
 

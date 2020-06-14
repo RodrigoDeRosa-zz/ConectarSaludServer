@@ -11,24 +11,37 @@ from src.model.authentication.auth_data import AuthData
 from src.service.resource_management.doctors.doctor_management_service import DoctorManagementService
 from src.service.resource_management.doctors.mappers.doctor_management_request_mapper import \
     DoctorManagementRequestMapper
+from src.service.resource_management.symptoms.symptoms_service import SymptomsService
 from src.utils.logging.logger import Logger
 
 
 class ResourceLoader:
 
+    BASE_PATH = 'resources/'
+    INITIAL_RESOURCES_FOLDER = f'{BASE_PATH}/initial_resources/'
     DOCTORS = 'doctors.json'
     USERS = 'users.json'
     AFFILIATES = 'affiliates.json'
-    FOLDER = 'resources/initial_resources/'
+    SYMPTOMS = f'{BASE_PATH}/symptoms.json'
     PATH = None
 
     @classmethod
     def load_resources(cls, env):
         """ Load resources to database for every non-existent collection. """
-        cls.PATH = f'{abspath(join(dirname(__file__), "../../.."))}{"/" if env != "docker" else ""}{cls.FOLDER}'
+        cls.PATH = f'{abspath(join(dirname(__file__), "../../.."))}{"/" if env != "docker" else ""}'
+        SymptomsService.set_symptoms(cls.__load_symptoms())
         IOLoop.current().add_timeout(0, cls.__load_doctors)
         IOLoop.current().add_timeout(0, cls.__load_users)
         IOLoop.current().add_timeout(0, cls.__load_affiliates)
+
+    @classmethod
+    def __load_symptoms(cls):
+        """ Load accepted symptoms from file. """
+        Logger(cls.__name__).info('Loading accepted symptoms...')
+        file_name = f'{cls.PATH}{cls.SYMPTOMS}'
+        with open(file_name) as fd:
+            symptoms = load(fd)
+        return symptoms
 
     @classmethod
     async def __load_users(cls):
@@ -36,7 +49,7 @@ class ResourceLoader:
         if await AuthenticationDAO.get_all({}): return
         # Only load file if there are no users in the database
         Logger(cls.__name__).info('Creating basic authentication database entries...')
-        file_name = f'{cls.PATH}{cls.USERS}'
+        file_name = f'{cls.PATH}{cls.INITIAL_RESOURCES_FOLDER}{cls.USERS}'
         with open(file_name) as fd:
             users = load(fd)
         # Add every user to the database
@@ -49,7 +62,7 @@ class ResourceLoader:
         if await DoctorDAO.all(): return
         # Only load file if there are no doctors in the database
         Logger(cls.__name__).info('Creating basic doctor database entries...')
-        file_name = f'{cls.PATH}{cls.DOCTORS}'
+        file_name = f'{cls.PATH}{cls.INITIAL_RESOURCES_FOLDER}{cls.DOCTORS}'
         with open(file_name) as fd:
             doctors = load(fd)
         # Add every doctor to the database
@@ -62,7 +75,7 @@ class ResourceLoader:
         if await AffiliateDAO.all(): return
         # Only load file if there are no doctors in the database
         Logger(cls.__name__).info('Creating basic affiliate database entries...')
-        file_name = f'{cls.PATH}{cls.AFFILIATES}'
+        file_name = f'{cls.PATH}{cls.INITIAL_RESOURCES_FOLDER}{cls.AFFILIATES}'
         with open(file_name) as fd:
             affiliates = load(fd)
         # Add every affiliate to the database

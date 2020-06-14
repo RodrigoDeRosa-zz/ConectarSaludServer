@@ -10,7 +10,7 @@ class AuthenticationHandler(CustomRequestHandler):
     SUPPORTED_METHODS = ['OPTIONS', 'POST', 'PUT']
 
     async def post(self):
-        await self.wrap_handling(self.__authenticate, **{})
+        await self.wrap_coroutine(self.__authenticate, **{})
 
     async def put(self):
         """ TODO -> Remove this endpoint. """
