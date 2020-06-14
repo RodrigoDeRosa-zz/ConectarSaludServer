@@ -1,0 +1,193 @@
+{
+  "nodes": [
+    {
+      "id": "Male",
+      "conditions": [
+        {
+          "field": "sex",
+          "value": "male",
+          "operation": "eq"
+        }
+      ]
+    },
+    {
+      "id": "Female",
+      "conditions": [
+        {
+          "field": "sex",
+          "value": "female",
+          "operation": "eq"
+        }
+      ]
+    },
+    {
+      "id": "Pediatrics",
+      "conditions": [
+        {
+          "field": "age",
+          "value": 14,
+          "operation": "lt"
+        }
+      ],
+      "output": "Pediatrics"
+    },
+    {
+      "id": "Otolaryngology",
+      "conditions": [
+        {
+          "field": "symptom",
+          "value": [
+            "Dolor de oídos",
+            "Pérdida de audición",
+            "Oído tapado",
+            "Zumbidos",
+            "Picor de oído",
+            "Boca seca",
+        	"Dolor de muelas",
+	        "Dolor de encías",
+	        "Dificultad para masticar",
+	        "Pérdida del gusto"
+          ],
+          "operation": "in"
+        }
+      ],
+      "output": "Otolaryngology"
+    },
+    {
+      "id": "Cardiology",
+      "conditions": [
+        {
+          "field": "symptom",
+          "value": [
+            "Palpitaciones",
+        	"Ritmo cardíaco rápido"
+          ],
+          "operation": "in"
+        }
+      ],
+      "output": "Cardiology"
+    },
+    {
+      "id": "Dermatology",
+      "conditions": [
+        {
+          "field": "symptom",
+          "value": [
+            "Problema en la piel"
+          ],
+          "operation": "in"
+        }
+      ],
+      "output": "Dermatology"
+    },
+    {
+      "id": "Psychiatry",
+      "conditions": [
+        {
+          "field": "symptom",
+          "value": [
+            "Depresión"
+          ],
+          "operation": "in"
+        }
+      ],
+      "output": "Psychiatry"
+    },
+    {
+      "id": "Gastroenterology",
+      "conditions": [
+        {
+          "field": "symptom",
+          "value": [
+            "Dolor de abdomen"
+          ],
+          "operation": "in"
+        }
+      ],
+      "output": "Gastroenterology"
+    },
+    {
+      "id": "Genital",
+      "conditions": [
+        {
+          "field": "symptom",
+          "value": [
+            "Sangrado genital",
+            "Secreción genital",
+            "Problema sexual",
+            "Infección urinaria"
+          ],
+          "operation": "in"
+        }
+      ]
+    }
+  ],
+  "joints": [
+    {
+      "id": "Urology",
+      "nodes": [
+        "Genital",
+        "Male"
+      ],
+      "output": "Urology"
+    },
+    {
+      "id": "Gynecology",
+      "nodes": [
+        "Genital",
+        "Female"
+      ],
+      "output": "Gynecology"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "Otolaryngology",
+      "object": {
+        "specialty": "Otorrinolaringologia"
+      }
+    },
+    {
+      "id": "Cardiology",
+      "object": {
+        "specialty": "Cardiología"
+      }
+    },
+    {
+      "id": "Urology",
+      "object": {
+        "specialty": "Urología"
+      }
+    },
+    {
+      "id": "Gynecology",
+      "object": {
+        "specialty": "Ginecología"
+      }
+    },
+    {
+      "id": "Dermatology",
+      "object": {
+        "specialty": "Dermatología"
+      }
+    },
+    {
+      "id": "Psychiatry",
+      "object": {
+        "specialty": "Psiquiatría"
+      }
+    },
+    {
+      "id": "Gastroenterology",
+      "object": {
+        "specialty": "Gastroenterología"
+      }
+    },
+    {
+      "id": "Pediatrics",
+      "object": {
+        "specialty": "Pediatría"
+      }
+    }
+  ]
+}
