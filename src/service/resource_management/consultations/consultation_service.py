@@ -8,7 +8,7 @@ from src.database.daos.doctor_dao import DoctorDAO
 from src.handlers.socket.socket_manager import SocketManager
 from src.model.affiliates.affiliate import Affiliate
 from src.model.consultations.consultation import Consultation, ConsultationScore, ConsultationStatus, \
-    ConsultationOpinion
+    ConsultationOpinion, ConsultationDTO
 from src.model.doctors.doctor import Doctor
 from src.model.errors.business_error import BusinessError
 from src.service.queue.queue_manager import QueueManager
@@ -17,7 +17,7 @@ from src.service.queue.queue_manager import QueueManager
 class ConsultationService:
 
     @classmethod
-    async def create_for_affiliate(cls, affiliate_dni: str) -> Consultation:
+    async def create_for_affiliate(cls, affiliate_dni: str, consultation_data: ConsultationDTO) -> Consultation:
         """ Creates a new consultation for the given affiliate and returns it's id. """
         # TODO -> We'll also need the "patient"
         affiliate = await AffiliateDAO.find(affiliate_dni)
@@ -28,7 +28,13 @@ class ConsultationService:
         if consultation: return consultation
         # Create new consultation and store
         consultation_id = str(uuid.uuid4())
-        consultation = Consultation(id=consultation_id, affiliate=affiliate)
+        consultation = Consultation(
+            id=consultation_id,
+            affiliate=affiliate,
+            symptoms=consultation_data.symptoms,
+            reason=consultation_data.reason,
+            patient_dni=consultation_data.patient_dni
+        )
         await ConsultationDAO.store(consultation)
         # Return id for response
         return consultation
@@ -52,7 +58,7 @@ class ConsultationService:
         await QueueManager.enqueue(consultation)
 
     @classmethod
-    async def next_consultation(cls, doctor_id) -> Tuple[str, Affiliate]:
+    async def next_consultation(cls, doctor_id) -> Tuple[Consultation, Affiliate]:
         """ Returns a consultation that is waiting for a doctor. """
         if not await DoctorDAO.find_by_id(doctor_id):
             raise BusinessError(f'There are no doctors with ID {doctor_id}.', 404)
@@ -66,7 +72,7 @@ class ConsultationService:
         # Get associated affiliate
         affiliate = await AffiliateDAO.find(consultation.affiliate_dni)
         # Return id
-        return consultation.id, affiliate
+        return consultation, affiliate
 
     @classmethod
     async def start_call(cls, doctor_id: str) -> str:

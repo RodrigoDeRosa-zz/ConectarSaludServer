@@ -16,5 +16,5 @@ class ConsultationManagementHandler(CustomRequestHandler):
 
     async def __next_consultation(self, doctor_id):
         """ Return a consultation in need of a doctor. """
-        consultation_id, affiliate = await ConsultationService.next_consultation(doctor_id)
-        self.make_response(ConsultationResponseMapper.map_for_doctor(consultation_id, affiliate))
+        consultation, affiliate = await ConsultationService.next_consultation(doctor_id)
+        self.make_response(ConsultationResponseMapper.map_for_doctor(consultation, affiliate))

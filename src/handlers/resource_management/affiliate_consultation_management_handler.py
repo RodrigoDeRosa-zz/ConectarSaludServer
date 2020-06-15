@@ -1,5 +1,6 @@
 from src.handlers.custom_request_handler import CustomRequestHandler
 from src.service.resource_management.consultations.consultation_service import ConsultationService
+from src.service.resource_management.consultations.mappers.consultation_request_mapper import ConsultationRequestMapper
 from src.service.resource_management.consultations.mappers.consultation_response_mapper import \
     ConsultationResponseMapper
 from src.service.resource_management.consultations.mappers.consultation_scoring_request_mapper import \
@@ -27,7 +28,8 @@ class AffiliateConsultationManagementHandler(CustomRequestHandler):
 
     async def __create_affiliate_consultation(self, affiliate_dni):
         """ Creates a new consultation for the given affiliate. """
-        consultation = await ConsultationService.create_for_affiliate(affiliate_dni)
+        consultation_data = ConsultationRequestMapper.map(self._parse_body())
+        consultation = await ConsultationService.create_for_affiliate(affiliate_dni, consultation_data)
         self.make_response(ConsultationResponseMapper.map_consultation(consultation))
 
     @staticmethod

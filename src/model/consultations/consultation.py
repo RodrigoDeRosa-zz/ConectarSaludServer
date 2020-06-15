@@ -64,6 +64,13 @@ class ConsultationScore:
 
 
 @dataclass
+class ConsultationDTO:
+    symptoms: List[str]
+    reason: str
+    patient_dni: str = None
+
+
+@dataclass
 class QueueableData:
     id: str
     socket_id: str

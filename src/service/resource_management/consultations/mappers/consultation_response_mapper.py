@@ -22,9 +22,11 @@ class ConsultationResponseMapper:
         }
 
     @staticmethod
-    def map_for_doctor(consultation_id: str, affiliate: Affiliate) -> dict:
+    def map_for_doctor(consultation: Consultation, affiliate: Affiliate) -> dict:
         return {
-            'consultation_id': consultation_id,
+            'consultation_id': consultation.id,
+            'symptoms': consultation.symptoms,
+            'reason': consultation.reason,
             'affiliate_first_name': affiliate.first_name,
             'affiliate_last_name': affiliate.last_name,
             'affiliate_plan': affiliate.plan,
