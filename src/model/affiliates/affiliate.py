@@ -8,3 +8,6 @@ class Affiliate:
     last_name: str
     plan: str
     id: str
+    sex: str
+    age: int
+

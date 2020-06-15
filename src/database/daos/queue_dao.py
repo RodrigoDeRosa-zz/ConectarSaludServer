@@ -3,7 +3,7 @@ from typing import List
 
 from src.database.daos.generic_dao import GenericDAO
 from src.database.mongo import Mongo
-from src.model.consultations.consultation import QueueableData, ConsultationPriority
+from src.model.consultations.consultation import QueueableData
 
 
 class QueueDAO(GenericDAO):
@@ -29,7 +29,7 @@ class QueueDAO(GenericDAO):
         return QueueableData(
             id=document['_id'],
             socket_id=document['socket_id'],
-            priority=ConsultationPriority(document.get('priority', 0)),
+            priority=document.get('priority', 0),
             creation_time=document['creation_time']
         )
 
@@ -38,7 +38,7 @@ class QueueDAO(GenericDAO):
         return {
             '_id': queueable_data.id,
             'socket_id': queueable_data.socket_id,
-            'priority': queueable_data.priority.value,
+            'priority': queueable_data.priority,
             'creation_time': queueable_data.creation_time,
         }
 

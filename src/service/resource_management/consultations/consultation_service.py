@@ -19,14 +19,16 @@ class ConsultationService:
     @classmethod
     async def create_for_affiliate(cls, affiliate_dni: str) -> Consultation:
         """ Creates a new consultation for the given affiliate and returns it's id. """
-        if not await AffiliateDAO.find(affiliate_dni):
+        # TODO -> We'll also need the "patient"
+        affiliate = await AffiliateDAO.find(affiliate_dni)
+        if not affiliate:
             raise BusinessError(f'There is no affiliate with DNI {affiliate_dni}.', 404)
         # If there is an ongoing call, return it's id
         consultation = await ConsultationDAO.affiliate_consultation_in_progress(affiliate_dni)
         if consultation: return consultation
         # Create new consultation and store
         consultation_id = str(uuid.uuid4())
-        consultation = Consultation(id=consultation_id, affiliate_dni=affiliate_dni, creation_date=datetime.now())
+        consultation = Consultation(id=consultation_id, affiliate=affiliate)
         await ConsultationDAO.store(consultation)
         # Return id for response
         return consultation
@@ -52,7 +54,6 @@ class ConsultationService:
     @classmethod
     async def next_consultation(cls, doctor_id) -> Tuple[str, Affiliate]:
         """ Returns a consultation that is waiting for a doctor. """
-        # TODO -> This should be automatic and triggered by the queue in the future
         if not await DoctorDAO.find_by_id(doctor_id):
             raise BusinessError(f'There are no doctors with ID {doctor_id}.', 404)
         consultation = await QueueManager.pop()

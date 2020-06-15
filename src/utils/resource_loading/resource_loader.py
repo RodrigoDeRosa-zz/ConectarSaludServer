@@ -86,6 +86,8 @@ class ResourceLoader:
                     dni=affiliate['dni'],
                     first_name=affiliate['first_name'],
                     last_name=affiliate['last_name'],
-                    plan=affiliate['plan']
+                    plan=affiliate['plan'],
+                    sex=affiliate['sex'],
+                    age=affiliate['age']
                 )
             )

@@ -4,20 +4,35 @@
     "first_name": "Facundo",
     "last_name": "Guerrero",
     "plan": "Basico",
-    "id": "CS0123"
+    "id": "CS0123",
+    "sex": "female",
+    "age": 24
   },
   {
     "dni": "12345678",
     "first_name": "John",
     "last_name": "Doe",
     "plan": "Basico",
-    "id": "CS0231"
+    "id": "CS0231",
+    "sex": "male",
+    "age": 18
   },
   {
     "dni": "39211048",
     "first_name": "Marcos",
     "last_name": "Schapira",
     "plan": "Basico",
-    "id": "CS1341"
+    "id": "CS1341",
+    "sex": "male",
+    "age": 24
+  },
+  {
+    "dni": "3344556677",
+    "first_name": "Billy",
+    "last_name": "The Kid",
+    "plan": "Basico",
+    "id": "CS2233",
+    "sex": "male",
+    "age": 13
   }
 ]

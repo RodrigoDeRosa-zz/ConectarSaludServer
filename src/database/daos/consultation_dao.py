@@ -54,31 +54,42 @@ class ConsultationDAO(GenericDAO):
         return Consultation(
             id=document['_id'],
             affiliate_dni=document['affiliate_dni'],
+            patient_dni=document['patient_dni'],
             status=ConsultationStatus[document['status']],
             creation_date=document['creation_date'],
+            priority=document['priority'],
+            symptoms=document.get('symptoms', list()),
+            reason=document.get('reason'),
+            specialties=document.get('specialties', list()),
             doctor_id=document.get('doctor_id'),
             call_id=document.get('call_id'),
             score=document.get('score'),
             score_opinion=document.get('score_opinion'),
             prescription=document.get('prescription'),
             indications=document.get('indications'),
-            socket_id=document.get('socket_id')
+            socket_id=document.get('socket_id'),
+            retrieval=True
         )
 
     @classmethod
     def __to_document(cls, consultation: Consultation) -> dict:
         document = dict()
         # Add only existent fields to the document. This way we can create and update with the same code
-        if consultation.affiliate_dni: document['affiliate_dni'] = consultation.affiliate_dni
-        if consultation.status: document['status'] = consultation.status.value
-        if consultation.creation_date: document['creation_date'] = consultation.creation_date
-        if consultation.doctor_id: document['doctor_id'] = consultation.doctor_id
-        if consultation.call_id: document['call_id'] = consultation.call_id
-        if consultation.score: document['score'] = consultation.score
-        if consultation.score_opinion: document['score_opinion'] = consultation.score_opinion
-        if consultation.prescription: document['prescription'] = consultation.prescription
-        if consultation.indications: document['indications'] = consultation.indications
-        if consultation.socket_id: document['socket_id'] = consultation.socket_id
+        if consultation.affiliate_dni is not None: document['affiliate_dni'] = consultation.affiliate_dni
+        if consultation.patient_dni is not None: document['patient_dni'] = consultation.patient_dni
+        if consultation.status is not None: document['status'] = consultation.status.value
+        if consultation.priority is not None: document['priority'] = consultation.priority
+        if consultation.reason is not None: document['reason'] = consultation.reason
+        if consultation.symptoms is not None: document['symptoms'] = consultation.symptoms
+        if consultation.specialties is not None: document['specialties'] = consultation.specialties
+        if consultation.creation_date is not None: document['creation_date'] = consultation.creation_date
+        if consultation.doctor_id is not None: document['doctor_id'] = consultation.doctor_id
+        if consultation.call_id is not None: document['call_id'] = consultation.call_id
+        if consultation.score is not None: document['score'] = consultation.score
+        if consultation.score_opinion is not None: document['score_opinion'] = consultation.score_opinion
+        if consultation.prescription is not None: document['prescription'] = consultation.prescription
+        if consultation.indications is not None: document['indications'] = consultation.indications
+        if consultation.socket_id is not None: document['socket_id'] = consultation.socket_id
         # Return create/update document
         return document
 

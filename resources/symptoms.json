@@ -5,80 +5,80 @@
     "Fiebre mayor a 39 grados",
     "Hinchazón",
     "Hormigueo",
-    "Debilidad muscular",
+    "Debilidad en músculos de la cara",
     "Pérdida de conocimiento"
   ],
   "Oidos": [
-	"Dolor de oídos",
-	"Pérdida de audición",
-	"Oído tapado",
-	"Zumbidos",
-	"Picor de oído"
+    "Dolor de oídos",
+    "Pérdida de audición",
+    "Oído tapado",
+    "Zumbidos",
+    "Picor de oído"
   ],
   "Ojos": [
-	"Dolor de ojos",
-	"Ojos llorosos",
-	"Picor de ojos",
-	"Ojos rojos",
-	"Pérdida de visión",
-	"Ojos secos"
+    "Dolor de ojos",
+    "Ojos llorosos",
+    "Picor de ojos",
+    "Ojos rojos",
+    "Pérdida de visión",
+    "Ojos secos"
   ],
   "Boca": [
-	"Boca seca",
-	"Dolor de muelas",
-	"Dolor de encías",
-	"Dificultad para masticar",
-	"Pérdida del gusto"
+    "Boca seca",
+    "Dolor de muelas",
+    "Dolor de encías",
+    "Dificultad para masticar",
+    "Pérdida del gusto"
   ],
   "Garganta": [
-	"Dolor de garganta",
-	"Tos",
-	"Garganta roja",
-	"Bulto en la garganta"
+    "Dolor de garganta",
+    "Tos",
+    "Garganta roja",
+    "Bulto en la garganta"
   ],
   "Pecho": [
-	"Dolor de pecho",
-	"Problemas respiratorios",
-	"Acidez",
-	"Palpitaciones",
-	"Ritmo cardíaco rápido"
+    "Dolor de pecho",
+    "Problemas respiratorios",
+    "Palpitaciones",
+    "Ritmo cardíaco rápido"
   ],
   "Brazos": [
-	"Dolor de brazos",
-	"Adormecimiento de brazos",
-	"Movimiento disminuido de brazos",
-	"Imflamación en el brazo"
+    "Dolor de brazos",
+    "Adormecimiento de brazos",
+    "Movimiento disminuido de brazos",
+    "Imflamación en el brazo"
   ],
   "Abdomen": [
-    "Dolor de abdomen"
+    "Dolor de abdomen",
+    "Acidez"
   ],
   "Espalda": [
-	"Dolor de espalda"
+    "Dolor de espalda"
   ],
   "Genitales": [
-	"Sangrado genital",
-	"Secreción genital",
-	"Problema sexual",
-	"Infección urinaria"
+    "Sangrado genital",
+    "Secreción genital",
+    "Problema sexual",
+    "Infección urinaria"
   ],
   "Piernas": [
-	"Dolor en cadera",
-	"Dolor en piernas o pies",
-	"Dolor al mover piernas o pies",
-	"Dolor en articulaciones",
-	"Lesión de pierna o pie"
+    "Dolor en cadera",
+    "Dolor en piernas o pies",
+    "Dolor al mover piernas o pies",
+    "Dolor en articulaciones",
+    "Lesión de pierna o pie"
   ],
   "Otros": [
     "Cansancio",
-	"Vómitos",
-	"Diarrea",
-	"Malestar general",
-	"Problema en la piel",
-	"Alergia",
-	"Presión arterial alta",
-	"Colesterol",
-	"Depresión",
-	"Dieta",
-	"Otros"
+    "Vómitos",
+    "Diarrea",
+    "Malestar general",
+    "Problema en la piel",
+    "Alergia",
+    "Presión arterial alta",
+    "Colesterol",
+    "Depresión",
+    "Dieta",
+    "Otros"
   ]
 }

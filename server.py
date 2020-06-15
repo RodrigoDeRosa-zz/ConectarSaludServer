@@ -1,6 +1,7 @@
 from tornado.ioloop import IOLoop
 
 from src.database.mongo import Mongo
+from src.service.resolvers.priority_resolver import PriorityResolver
 from src.service.resolvers.specialty_resolver import SpecialtyResolver
 from src.utils.logging.logger import Logger
 from src.utils.argument_parsing.argument_parsing_utils import ArgumentParsingUtils
@@ -27,6 +28,7 @@ def start():
     ResourceLoader.load_resources(env)
     # Set up rules engine
     SpecialtyResolver.set_up(env)
+    PriorityResolver.set_up(env)
     # Start event loop
     Logger(__name__).info(f'Listening on http://localhost:{port}.')
     IOLoop.current().start()

@@ -40,7 +40,9 @@ class AffiliateDAO(GenericDAO):
             first_name=document['first_name'],
             last_name=document['last_name'],
             plan=document['plan'],
-            id=document['id']
+            id=document['id'],
+            sex=document['sex'],
+            age=document['age']
         )
 
     @classmethod
@@ -51,6 +53,8 @@ class AffiliateDAO(GenericDAO):
         if affiliate.last_name: document['last_name'] = affiliate.last_name
         if affiliate.plan: document['plan'] = affiliate.plan
         if affiliate.id: document['id'] = affiliate.id
+        if affiliate.sex: document['sex'] = affiliate.sex
+        if affiliate.age: document['age'] = affiliate.age
         # Return create/update document
         return document
 
