@@ -13,6 +13,8 @@ class QueueManager:
     __QUEUE: ConsultationQueue = None
     CONSULTATION_MINUTES = 10
 
+    # TODO -> Take specialties into account
+
     @classmethod
     async def enqueue(cls, consultation: Consultation):
         """ Add consultation to queue. """
