@@ -33,10 +33,10 @@ class CustomRequestHandler(RequestHandler):
         self.set_header('Access-Control-Allow-Headers', '*')
         self.set_header('Access-Control-Allow-Methods', ', '.join(self.SUPPORTED_METHODS))
         # There are cases with no body
-        if response:
+        if response is not None:
             # The following is done to accept List responses (Tornado doesn't accept them by default)
             json_response = response if not isinstance(response, str) else loads(response)
-            self.write(dumps(json_response))
+            self.write(dumps(json_response).encode('utf-8'))
 
     def options(self, *args, **kwargs):
         self.make_response(status_code=204)
