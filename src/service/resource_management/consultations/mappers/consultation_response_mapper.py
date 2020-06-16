@@ -13,10 +13,11 @@ class ConsultationResponseMapper:
         for consultation, doctor in zip(consultations, doctors):
             response.append(
                 {
-                    "consultation_id": consultation.id,
-                    "doctor_first_name": doctor.first_name,
-                    "doctor_last_name": doctor.last_name,
-                    "date": consultation.creation_date.strftime('%d-%m-%Y %H:%M:%S')
+                    'consultation_id': consultation.id,
+                    'doctor_first_name': doctor.first_name,
+                    'doctor_last_name': doctor.last_name,
+                    'doctor_specialties': doctor.specialties,
+                    'date': consultation.creation_date.strftime('%d-%m-%Y %H:%M:%S')
                 }
             )
         return response
