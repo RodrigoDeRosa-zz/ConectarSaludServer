@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Tuple
+from typing import Tuple, List
 
 from src.database.daos.affiliate_dao import AffiliateDAO
 from src.database.daos.consultation_dao import ConsultationDAO
@@ -100,20 +100,22 @@ class ConsultationService:
         return call_id
 
     @classmethod
-    async def affiliate_consultation(cls, affiliate_dni: str, consultation_id: str) -> Tuple[Consultation, Doctor]:
+    async def affiliate_consultation(
+            cls,
+            affiliate_dni: str,
+            consultation_id: str
+    ) -> Tuple[Consultation, Doctor, Affiliate]:
         """ Get consultation and check if affiliate and consultation are related. """
         consultation = await cls.__get_affiliate_consultation(affiliate_dni, consultation_id)
         # Check that the consultation belongs to the affiliate
         if not consultation.affiliate_dni == affiliate_dni:
             raise BusinessError(f'Failed to match affiliate DNI to consultation ID.', 400)
-        # TODO -> remove this if when full flow is implemented
         # Get consultation doctor
-        if consultation.doctor_id:
-            doctor = await DoctorDAO.find_by_id(consultation.doctor_id)
-        else:
-            doctor = Doctor(first_name='Fernando', last_name='Acero')
+        doctor = await DoctorDAO.find_by_id(consultation.doctor_id)
+        # Get consultation patient
+        patient = await AffiliateDAO.find(consultation.patient_dni)
         # Return both objects for mapping
-        return consultation, doctor
+        return consultation, doctor, patient
 
     @classmethod
     async def put_scoring_data(cls, affiliate_dni: str, consultation_id: str, score: ConsultationScore):
@@ -138,6 +140,15 @@ class ConsultationService:
         consultation.indications = opinion.indications
         consultation.status = ConsultationStatus.FINISHED
         await ConsultationDAO.store(consultation)
+
+    @classmethod
+    async def all_consultations(cls, affiliate_dni: str) -> Tuple[List[Consultation], List[Doctor]]:
+        """ Returns all the past consultations of the given affiliate. """
+        if not await AffiliateDAO.find(affiliate_dni):
+            raise BusinessError(f'There is no affiliate with DNI {affiliate_dni}.', 404)
+        consultations = await ConsultationDAO.all_affiliate_consultations(affiliate_dni)
+        doctors = [await DoctorDAO.find_by_id(consultation.doctor_id) for consultation in consultations]
+        return consultations, doctors
 
     @classmethod
     async def __get_affiliate_consultation(cls, affiliate_dni: str, consultation_id: str) -> Consultation:

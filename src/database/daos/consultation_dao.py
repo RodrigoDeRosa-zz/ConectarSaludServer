@@ -1,4 +1,5 @@
 import pymongo
+from typing import List
 
 from src.database.daos.generic_dao import GenericDAO
 from src.database.mongo import Mongo
@@ -24,6 +25,12 @@ class ConsultationDAO(GenericDAO):
     async def affiliate_consultation_in_progress(cls, affiliate_dni: str) -> Consultation:
         document = await cls.get_first({'affiliate_dni': affiliate_dni, 'status': ConsultationStatus.IN_PROGRESS.value})
         return None if not document else cls.__to_object(document)
+
+    @classmethod
+    async def all_affiliate_consultations(cls, affiliate_dni: str) -> List[Consultation]:
+        """ Retrieve all of the affiliate's finished consultations. """
+        documents = await cls.get_all({'affiliate_dni': affiliate_dni, 'status': ConsultationStatus.FINISHED.value})
+        return [cls.__to_object(document) for document in documents]
 
     @classmethod
     async def next_consultation_waiting_call(cls, doctor_id: str) -> Consultation:
