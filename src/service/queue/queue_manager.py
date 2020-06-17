@@ -14,13 +14,17 @@ class QueueManager:
     __QUEUES_BY_SPECIALTY: Dict[str, ConsultationQueue] = dict()
     CONSULTATION_MINUTES = 10
     __MAIN_QUEUE_ID = 'Medicina general'
+    __PEDIATRICS = 'Pediatría'
 
     @classmethod
     async def enqueue(cls, consultation: Consultation):
         """ Add consultation to queue. """
         queueable_data = cls.__to_queueable_data(consultation)
+        # Pediatrics should only be taken by a pediatrician
+        queue_specialties = [cls.__PEDIATRICS] if cls.__PEDIATRICS in consultation.specialties\
+            else set(consultation.specialties + [cls.__MAIN_QUEUE_ID])
         # Update every specialty's queue. Medicina general should always be included.
-        for specialty in set(consultation.specialties + [cls.__MAIN_QUEUE_ID]):
+        for specialty in queue_specialties:
             # Create queue if not existent
             if specialty not in cls.__QUEUES_BY_SPECIALTY:
                 cls.__QUEUES_BY_SPECIALTY[specialty] = await cls.__create_queue(specialty)
@@ -29,9 +33,10 @@ class QueueManager:
         # Persist in DB
         await QueueDAO.store(queueable_data)
         # Notify user approximate waiting time. Main queue is used for worst case scenario.
+        time_queue_name = cls.__PEDIATRICS if cls.__PEDIATRICS in queue_specialties else cls.__MAIN_QUEUE_ID
         await cls.__notify_single_affiliate(
             queueable_data,
-            cls.__QUEUES_BY_SPECIALTY[cls.__MAIN_QUEUE_ID].index_of(queueable_data)
+            cls.__QUEUES_BY_SPECIALTY[time_queue_name].index_of(queueable_data)
         )
 
     @classmethod

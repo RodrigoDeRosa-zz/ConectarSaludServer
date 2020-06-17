@@ -15,9 +15,9 @@ class BetaMemory:
         self.alpha: AlphaMemory = alpha_memory
         self.output: OutputMemory = output_memory
 
-    def evaluate(self) -> Optional[Result]:
+    def evaluate(self) -> Optional[List[Result]]:
         self.evaluate_joints()
-        return self.first_enabled_output()
+        return self.enabled_outputs()
 
     def should_continue(self) -> bool:
         return len(self.joints) > 0
@@ -37,6 +37,6 @@ class BetaMemory:
         # Store the enabled joints
         self.enabled_joints = [joint for joint in self.joints if joint.enabled]
 
-    def first_enabled_output(self) -> Optional[Result]:
+    def enabled_outputs(self) -> Optional[List[Result]]:
         enabled_joint_outputs = [joint.output for joint in self.enabled_joints]
-        return self.output.find_first(enabled_joint_outputs)
+        return self.output.get_all(enabled_joint_outputs)

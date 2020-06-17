@@ -27,11 +27,14 @@ class ConsultationQueue:
         try:
             return heappop(self.queue)
         except IndexError:
-            return None
+            return
 
     def remove(self, queueable_data: QueueableData):
         """ Remove specific queueable data"""
-        self.queue.remove(queueable_data)
+        try:
+            self.queue.remove(queueable_data)
+        except ValueError:
+            return
 
     def clear(self):
         """ Utility method """

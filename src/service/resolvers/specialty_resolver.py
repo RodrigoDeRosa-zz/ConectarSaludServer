@@ -18,8 +18,12 @@ class SpecialtyResolver(Resolver):
             alpha, beta = cls.create_memories()
             alpha.update_knowledge({'symptom': symptom, 'sex': sex, 'age': age})
             # Check for results
-            if (result := alpha.evaluate()) or (result := beta.evaluate()):
-                specialties.add(result.result_object['specialty'])
+            if result_list := alpha.evaluate():
+                for result in result_list:
+                    specialties.add(result.result_object['specialty'])
+            if result_list := beta.evaluate():
+                for result in result_list:
+                    specialties.add(result.result_object['specialty'])
         # If pediatrics is present, then that should be the returned specialty
         if cls.PEDIATRICS in specialties: return [cls.PEDIATRICS]
         # If there are no specific specialties or more than one, then the default value will be returned
