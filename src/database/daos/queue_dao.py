@@ -14,9 +14,9 @@ class QueueDAO(GenericDAO):
         await cls.insert(cls.__to_document(queueable_data))
 
     @classmethod
-    async def all(cls) -> List[QueueableData]:
+    async def all(cls, specialty: str) -> List[QueueableData]:
         """ Returns all queueable data units stored in the database. """
-        documents = await cls.get_all()
+        documents = await cls.get_all({'specialties': {'$elemMatch': {'$eq': specialty}}})
         return [cls.__to_object(document) for document in documents]
 
     @classmethod
@@ -30,6 +30,7 @@ class QueueDAO(GenericDAO):
             id=document['_id'],
             socket_id=document['socket_id'],
             priority=document.get('priority', 0),
+            specialties=document.get('specialties', []),
             creation_time=document['creation_time']
         )
 
@@ -39,6 +40,7 @@ class QueueDAO(GenericDAO):
             '_id': queueable_data.id,
             'socket_id': queueable_data.socket_id,
             'priority': queueable_data.priority,
+            'specialties': queueable_data.specialties,
             'creation_time': queueable_data.creation_time,
         }
 

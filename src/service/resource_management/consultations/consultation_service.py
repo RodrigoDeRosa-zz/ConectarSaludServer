@@ -60,11 +60,12 @@ class ConsultationService:
     @classmethod
     async def next_consultation(cls, doctor_id) -> Tuple[Consultation, Affiliate]:
         """ Returns a consultation that is waiting for a doctor. """
-        if not await DoctorDAO.find_by_id(doctor_id):
+        doctor = await DoctorDAO.find_by_id(doctor_id)
+        if not doctor:
             raise BusinessError(f'There are no doctors with ID {doctor_id}.', 404)
-        consultation = await QueueManager.pop()
+        consultation = await QueueManager.pop(doctor.specialties)
         if not consultation:
-            raise BusinessError('There are no consultations waiting for a doctor.', 404)
+            raise BusinessError('There are no consultations waiting for the given doctor.', 404)
         # Update information
         consultation.doctor_id = doctor_id
         consultation.status = ConsultationStatus.WAITING_CALL

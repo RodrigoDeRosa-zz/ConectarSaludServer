@@ -1,27 +1,52 @@
 [
   {
-	"dni": "14365833",
-	"licence": "12345",
-	"first_name": "Alfredo",
-	"last_name": "Perez",
-	"email": "aperez@gmail.com",
-	"specialties": [
-		"Cardiología"
-	],
-	"centers": [
-		"Hospital Pirovano"
-	],
-	"availability_times": [
+    "dni": "14365833",
+    "licence": "12345",
+    "first_name": "Alfredo",
+    "last_name": "Perez",
+    "email": "aperez@gmail.com",
+    "specialties": [
+      "Medicina general"
+    ],
+    "centers": [
+      "Hospital Pirovano"
+    ],
+    "availability_times": [
       {
-		"day": "monday",
-		"from_time": "10:00",
-		"to_time": "18:00"
-	  },
+        "day": "monday",
+        "from_time": "10:00",
+        "to_time": "18:00"
+      },
       {
-		"day": "tuesday",
-		"from_time": "10:00",
-		"to_time": "18:00"
+        "day": "tuesday",
+        "from_time": "10:00",
+        "to_time": "18:00"
       }
-	]
+    ]
+  },
+  {
+    "dni": "16437542",
+    "licence": "43654",
+    "first_name": "Johann",
+    "last_name": "Doe",
+    "email": "jdoe@gmail.com",
+    "specialties": [
+      "Psiquiatría"
+    ],
+    "centers": [
+      "Hospital Pirovano"
+    ],
+    "availability_times": [
+      {
+        "day": "monday",
+        "from_time": "10:00",
+        "to_time": "18:00"
+      },
+      {
+        "day": "tuesday",
+        "from_time": "10:00",
+        "to_time": "18:00"
+      }
+    ]
   }
 ]

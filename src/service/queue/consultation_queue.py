@@ -29,6 +29,10 @@ class ConsultationQueue:
         except IndexError:
             return None
 
+    def remove(self, queueable_data: QueueableData):
+        """ Remove specific queueable data"""
+        self.queue.remove(queueable_data)
+
     def clear(self):
         """ Utility method """
         self.queue = []

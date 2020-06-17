@@ -76,6 +76,7 @@ class QueueableData:
     socket_id: str
     creation_time: datetime
     priority: int
+    specialties: List[str] = field(default_factory=list)
 
     SECONDS_IN_MINUTE = 60
     PRIORITY_MINUTES = 30
