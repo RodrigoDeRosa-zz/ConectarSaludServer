@@ -22,7 +22,8 @@ class AuthenticationDAO(GenericDAO):
         return AuthData(
             user_id=document['_id'],
             password=document['password'],
-            role=document['role']
+            role=document['role'],
+            device_id=document.get('device_id')
         )
 
     @classmethod
