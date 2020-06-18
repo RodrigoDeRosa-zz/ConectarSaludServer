@@ -1,5 +1,4 @@
 import uuid
-from datetime import datetime
 from typing import Tuple, List
 
 from src.database.daos.affiliate_dao import AffiliateDAO
@@ -11,6 +10,7 @@ from src.model.consultations.consultation import Consultation, ConsultationScore
     ConsultationOpinion, ConsultationDTO
 from src.model.doctors.doctor import Doctor
 from src.model.errors.business_error import BusinessError
+from src.service.notification_service import NotificationService
 from src.service.queue.queue_manager import QueueManager
 
 
@@ -78,7 +78,8 @@ class ConsultationService:
     @classmethod
     async def start_call(cls, doctor_id: str) -> str:
         """ Returns a call ID if there is any for the given doctor. """
-        if not await DoctorDAO.find_by_id(doctor_id):
+        doctor = await DoctorDAO.find_by_id(doctor_id)
+        if not doctor:
             raise BusinessError(f'There is no doctor with ID {doctor_id}.', 404)
         # There could be a consultation in progress (in which case we would return that same call_id)
         consultation = await ConsultationDAO.doctor_consultation_in_progress(doctor_id)
@@ -93,6 +94,11 @@ class ConsultationService:
         # Notify start of call to affiliate via socket
         socket_id = consultation.socket_id
         await SocketManager.notify_call_start(call_id, socket_id)
+        # Notify start of call to affiliate via push notification
+        affiliate = await AffiliateDAO.find(consultation.affiliate_dni)
+        # TODO -> This if shouldn't be necessary, but it'll be here temporarily to avoid bugs
+        if affiliate.device_id:
+            NotificationService.notify_call_start(affiliate.device_id, doctor.last_name, affiliate.first_name)
         # Update consultation with new call id and IN_PROGRESS status
         consultation.status = ConsultationStatus.IN_PROGRESS
         consultation.call_id = call_id

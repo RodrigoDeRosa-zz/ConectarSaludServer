@@ -29,6 +29,14 @@ class AffiliateDAO(GenericDAO):
         )
 
     @classmethod
+    async def store_device_id(cls, affiliate_dni: str, device_id: str):
+        """ Store user's current device ID for later notification. """
+        await cls.upsert(
+            {'_id': affiliate_dni},
+            {'$set': {'device_id': device_id}}
+        )
+
+    @classmethod
     async def delete(cls, affiliate_dni: str):
         """ Remove affiliate from database. """
         await cls.delete_first({'_id': affiliate_dni})
@@ -42,7 +50,8 @@ class AffiliateDAO(GenericDAO):
             plan=document['plan'],
             id=document['id'],
             sex=document['sex'],
-            age=document['age']
+            age=document['age'],
+            device_id=document.get('device_id')
         )
 
     @classmethod
@@ -55,6 +64,7 @@ class AffiliateDAO(GenericDAO):
         if affiliate.id: document['id'] = affiliate.id
         if affiliate.sex: document['sex'] = affiliate.sex
         if affiliate.age: document['age'] = affiliate.age
+        if affiliate.device_id: document['device_id'] = affiliate.device_id
         # Return create/update document
         return document
 

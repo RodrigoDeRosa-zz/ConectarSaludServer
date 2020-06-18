@@ -2,4 +2,4 @@ python-socketio
 tornado
 motor
 pymongo
-mongomock
+pyfcm

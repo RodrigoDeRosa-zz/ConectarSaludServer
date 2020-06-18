@@ -11,4 +11,8 @@ class AuthenticationRequestMapper:
             if field not in request_body:
                 raise BusinessError(f'Failed to map incoming request. Missing field with ID {field}', 400)
         # Do mapping
-        return AuthData(user_id=request_body['user_id'], password=request_body['password'])
+        return AuthData(
+            user_id=request_body['user_id'],
+            password=request_body['password'],
+            device_id=request_body.get('token')
+        )

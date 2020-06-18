@@ -23,6 +23,7 @@ class AuthenticationService:
             user_info = await DoctorDAO.find_by_dni(auth_data.user_id)
         elif fetched_data.role == 'affiliate':
             user_info = await AffiliateDAO.find(auth_data.user_id)
+            await AffiliateDAO.store_device_id(user_info.dni, auth_data.device_id)
         else:
             # TODO -> This is for admin users
             user_info = None

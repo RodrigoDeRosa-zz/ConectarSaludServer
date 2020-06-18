@@ -10,4 +10,5 @@ class Affiliate:
     id: str
     sex: str
     age: int
+    device_id: str
 
