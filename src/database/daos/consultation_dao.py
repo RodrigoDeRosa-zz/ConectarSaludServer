@@ -27,6 +27,18 @@ class ConsultationDAO(GenericDAO):
         return None if not document else cls.__to_object(document)
 
     @classmethod
+    async def affiliate_required_consultation(cls, affiliate_dni: str) -> Consultation:
+        document = await cls.get_first({
+            'affiliate_dni': affiliate_dni,
+            'status': {'$in': [
+                ConsultationStatus.WAITING_DOCTOR.value,
+                ConsultationStatus.WAITING_CALL.value,
+                ConsultationStatus.IN_PROGRESS.value
+            ]}
+        })
+        return None if not document else cls.__to_object(document)
+
+    @classmethod
     async def all_affiliate_consultations(cls, affiliate_dni: str) -> List[Consultation]:
         """ Retrieve all of the affiliate's finished consultations. """
         documents = await cls.get_all({'affiliate_dni': affiliate_dni, 'status': ConsultationStatus.FINISHED.value})
