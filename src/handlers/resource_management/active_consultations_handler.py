@@ -12,7 +12,7 @@ class ActiveConsultationHandler(CustomRequestHandler):
 
     """ Handling methods """
 
-    async def __check_consultation_in_progress(self, affiliate_id):
+    async def __check_consultation_in_progress(self, affiliate_dni):
         """ Returns a call id if the affiliate has a consultation in progress. """
-        consultation = await ConsultationService.in_progress_consultation(affiliate_id)
+        consultation = await ConsultationService.in_progress_consultation(affiliate_dni)
         self.make_response(ConsultationResponseMapper.map_consultation_in_progress(consultation))
