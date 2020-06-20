@@ -66,7 +66,7 @@ class ConsultationScore:
 
 @dataclass
 class ConsultationDTO:
-    symptoms: str
+    symptoms: List[str]
     reason: str
     patient_dni: str = None
 
