@@ -20,6 +20,7 @@ class ConsultationStatus(Enum):
     WAITING_CALL = 'WAITING_CALL'
     IN_PROGRESS = 'IN_PROGRESS'
     FINISHED = 'FINISHED'
+    CANCELED = 'CANCELED'
 
 
 @dataclass

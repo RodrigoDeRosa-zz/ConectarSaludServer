@@ -43,7 +43,7 @@ class ConsultationService:
     async def cancel_consultation(cls, affiliate_dni: str, consultation_id: str):
         """ Cancels a consultation that is waiting for a doctor. """
         consultation = await cls.__get_affiliate_consultation(affiliate_dni, consultation_id)
-        consultation.status = ConsultationStatus.FINISHED
+        consultation.status = ConsultationStatus.CANCELED
         await ConsultationDAO.store(consultation)
 
     @classmethod
