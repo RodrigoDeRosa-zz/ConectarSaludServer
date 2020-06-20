@@ -17,12 +17,6 @@ from src.service.queue.queue_manager import QueueManager
 
 class ConsultationService:
 
-    __IN_PROGRESS_STATUS_LIST = [
-        ConsultationStatus.WAITING_CALL,
-        ConsultationStatus.WAITING_DOCTOR,
-        ConsultationStatus.IN_PROGRESS
-    ]
-
     @classmethod
     async def create_for_affiliate(cls, affiliate_dni: str, consultation_data: ConsultationDTO) -> Consultation:
         """ Creates a new consultation for the given affiliate and returns it's id. """
@@ -63,12 +57,13 @@ class ConsultationService:
     async def link_socket_to_consultation(cls, consultation_id: str, socket_id: str):
         """ Stores a relationship between a socket and a consultation. """
         consultation = await ConsultationDAO.find(consultation_id)
+        has_socket = consultation.socket_id is not None
         # This is to avoid socket re-enqueueing on finished reservations
         if consultation.status == ConsultationStatus.FINISHED: return
         # Set socket ID and update
         consultation.socket_id = socket_id
         await ConsultationDAO.store(consultation)
-        if consultation.status not in cls.__IN_PROGRESS_STATUS_LIST: await QueueManager.enqueue(consultation)
+        if not has_socket: await QueueManager.enqueue(consultation)
 
     @classmethod
     async def next_consultation(cls, doctor_id) -> Tuple[Consultation, Affiliate]:
