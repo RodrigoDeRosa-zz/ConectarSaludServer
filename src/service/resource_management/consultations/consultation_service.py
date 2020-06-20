@@ -1,3 +1,4 @@
+import ast
 import uuid
 from typing import Tuple, List, Optional
 
@@ -31,7 +32,7 @@ class ConsultationService:
         consultation = Consultation(
             id=consultation_id,
             affiliate=affiliate,
-            symptoms=consultation_data.symptoms,
+            symptoms=ast.literal_eval(consultation_data.symptoms),
             reason=consultation_data.reason,
             patient_dni=consultation_data.patient_dni
         )
