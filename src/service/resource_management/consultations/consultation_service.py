@@ -1,5 +1,5 @@
 import uuid
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 
 from src.database.daos.affiliate_dao import AffiliateDAO
 from src.database.daos.consultation_dao import ConsultationDAO
@@ -38,6 +38,11 @@ class ConsultationService:
         await ConsultationDAO.store(consultation)
         # Return id for response
         return consultation
+
+    @classmethod
+    async def in_progress_consultation(cls, affiliate_dni) -> Optional[Consultation]:
+        """ Returns a call id if there's a consultation in progress for the given affiliate and None otherwise. """
+        return await ConsultationDAO.affiliate_consultation_in_progress(affiliate_dni)
 
     @classmethod
     async def cancel_consultation(cls, affiliate_dni: str, consultation_id: str):

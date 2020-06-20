@@ -22,11 +22,26 @@ class ConsultationResponseMapper:
             )
         return response
 
-    @staticmethod
-    def map_consultation(consultation: Consultation) -> dict:
+    @classmethod
+    def map_consultation(cls, consultation: Consultation) -> dict:
         response = {'consultation_id': consultation.id}
         if consultation.call_id:
             response['call_id'] = consultation.call_id
+        return response
+
+    @classmethod
+    def map_consultation_in_progress(cls, consultation: Consultation) -> dict:
+        response = {
+            'consultation_id': None,
+            'call_id': None,
+            'symptoms': list(),
+            'reason': None
+        }
+        if not consultation: return response
+        response['consultation_id'] = consultation.id
+        response['call_id'] = consultation.call_id
+        response['symptoms'] = consultation.symptoms
+        response['reason'] = consultation.reason
         return response
 
     @staticmethod
