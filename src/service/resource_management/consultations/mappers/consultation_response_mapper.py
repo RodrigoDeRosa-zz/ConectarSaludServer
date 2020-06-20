@@ -40,7 +40,7 @@ class ConsultationResponseMapper:
         if not consultation: return response
         response['consultation_id'] = consultation.id
         response['call_id'] = consultation.call_id
-        response['symptoms'] = consultation.symptoms
+        response['symptoms'] = str(consultation.symptoms)
         response['reason'] = consultation.reason
         return response
 
