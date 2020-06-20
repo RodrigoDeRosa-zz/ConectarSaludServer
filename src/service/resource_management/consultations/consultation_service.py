@@ -68,7 +68,7 @@ class ConsultationService:
         # Set socket ID and update
         consultation.socket_id = socket_id
         await ConsultationDAO.store(consultation)
-        if consultation.status in cls.__IN_PROGRESS_STATUS_LIST: await QueueManager.enqueue(consultation)
+        if consultation.status not in cls.__IN_PROGRESS_STATUS_LIST: await QueueManager.enqueue(consultation)
 
     @classmethod
     async def next_consultation(cls, doctor_id) -> Tuple[Consultation, Affiliate]:
