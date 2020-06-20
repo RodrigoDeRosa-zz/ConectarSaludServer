@@ -31,7 +31,7 @@ class ConsultationService:
         if not affiliate:
             raise BusinessError(f'There is no affiliate with DNI {affiliate_dni}.', 404)
         # If there is an ongoing call, return it's id
-        consultation = await ConsultationDAO.affiliate_consultation_in_progress(affiliate_dni)
+        consultation = await ConsultationDAO.affiliate_required_consultation(affiliate_dni)
         if consultation: return consultation
         # Create new consultation and store
         consultation_id = str(uuid.uuid4())
