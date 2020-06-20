@@ -63,6 +63,17 @@ class QueueManager:
             Scheduler.run_in_millis(cls.__notify_affiliates)
             # Return related consultation object
             return await ConsultationDAO.find(queueable_data.id)
+        
+    @classmethod
+    async def cancel(cls, consultation: Consultation):
+        """ Removes a consultation from the queue. """
+        queueable_data = cls.__to_queueable_data(consultation)
+        for specialty in set(queueable_data.specialties + [cls.__MAIN_QUEUE_ID]):
+            # Load queue if not existent in memory
+            if specialty not in cls.__QUEUES_BY_SPECIALTY:
+                cls.__QUEUES_BY_SPECIALTY[specialty] = await cls.__create_queue(specialty)
+            cls.__QUEUES_BY_SPECIALTY[specialty].remove(queueable_data)
+            await QueueDAO.remove(queueable_data.id)
 
     @classmethod
     async def __notify_affiliates(cls):
