@@ -29,7 +29,7 @@ class GenericDAO:
         return documents
 
     @classmethod
-    async def get_sorted(cls, query=None, projection_dict=None, sort_list=None, limit=1):
+    async def get_sorted(cls, query=None, projection_dict=None, sort_list=None, limit=0):
         """
         Get all entries matching the given query. If there is no query, full collection is returned.
         An example of `sort_list` is [('call_millis', pymongo.ASCENDING)]
