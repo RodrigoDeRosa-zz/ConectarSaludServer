@@ -57,6 +57,7 @@ class ConsultationService:
     async def link_socket_to_consultation(cls, consultation_id: str, socket_id: str):
         """ Stores a relationship between a socket and a consultation. """
         consultation = await ConsultationDAO.find(consultation_id)
+        # Check if it had previously been associated to another socket
         has_socket = consultation.socket_id is not None
         # This is to avoid socket re-enqueueing on finished reservations
         if consultation.status == ConsultationStatus.FINISHED: return

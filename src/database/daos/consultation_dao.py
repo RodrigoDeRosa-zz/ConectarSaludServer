@@ -41,7 +41,10 @@ class ConsultationDAO(GenericDAO):
     @classmethod
     async def all_affiliate_consultations(cls, affiliate_dni: str) -> List[Consultation]:
         """ Retrieve all of the affiliate's finished consultations. """
-        documents = await cls.get_all({'affiliate_dni': affiliate_dni, 'status': ConsultationStatus.FINISHED.value})
+        documents = await cls.get_sorted(
+            {'affiliate_dni': affiliate_dni, 'status': ConsultationStatus.FINISHED.value},
+            sort_list=[('creation_date', pymongo.DESCENDING)]
+        )
         return [cls.__to_object(document) for document in documents]
 
     @classmethod
