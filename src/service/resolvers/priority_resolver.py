@@ -26,7 +26,7 @@ class PriorityResolver(Resolver):
             alpha.update_knowledge({'symptom': symptom})
             # Check for results
             if (result := alpha.evaluate()) or (result := beta.evaluate()):
-                priorities.append(result.result_object['priority_level'])
+                priorities.append(result[0].result_object['priority_level'])
         if not priorities: return cls.DEFAULT_PRIORITY
         # Return the maximum priority value
         return max(priorities)
