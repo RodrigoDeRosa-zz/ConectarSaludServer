@@ -6,6 +6,6 @@ from tornado.ioloop import IOLoop
 class Scheduler:
 
     @classmethod
-    def run_in_millis(cls, coroutine, millis=0, **kwargs):
+    def run_in_millis(cls, coroutine, millis=0):
         """ Set coroutine to run given milliseconds from now. """
-        IOLoop.current().add_timeout(timedelta(milliseconds=millis), coroutine, kwargs=kwargs)
+        IOLoop.current().add_timeout(timedelta(milliseconds=millis), coroutine)
