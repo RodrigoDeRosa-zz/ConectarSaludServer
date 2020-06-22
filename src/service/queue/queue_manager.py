@@ -65,12 +65,19 @@ class QueueManager:
     async def cancel(cls, consultation: Consultation):
         """ Removes a consultation from the queue. """
         queueable_data = cls.__to_queueable_data(consultation)
-        for specialty in set(queueable_data.specialties + [cls.__MAIN_QUEUE_ID]):
+        # Check if we should analyze main queue or only pediatrics
+        specialties_with_main = set(queueable_data.specialties + [cls.__MAIN_QUEUE_ID])
+        specialties_to_clean = specialties_with_main if cls.__PEDIATRICS not in queueable_data.specialties \
+            else set(cls.__PEDIATRICS)
+        # Remove from all specialties
+        for specialty in specialties_to_clean:
             # Load queue if not existent in memory
             if specialty not in cls.__QUEUES_BY_SPECIALTY:
                 cls.__QUEUES_BY_SPECIALTY[specialty] = await cls.__create_queue(specialty)
+            # Remove from queue
             cls.__QUEUES_BY_SPECIALTY[specialty].remove(queueable_data)
             await QueueDAO.remove(queueable_data.id)
+        # Notify all user of their new waiting time
         queue_name = cls.__PEDIATRICS if cls.__PEDIATRICS in queueable_data.specialties else cls.__MAIN_QUEUE_ID
         await cls.__notify_affiliates(queue_name)
 
@@ -78,7 +85,7 @@ class QueueManager:
     async def __notify_affiliates(cls, specialty: str, skips: int = 0):
         """ Send approximate remaining time to every affiliate via socket. """
         for index, value in enumerate(cls.__QUEUES_BY_SPECIALTY[specialty]):
-            await cls.__notify_single_affiliate(value, index, skips)
+            await cls.__notify_single_affiliate(value, index + skips)
 
     @classmethod
     async def __notify_single_affiliate(cls, queueable_data: QueueableData, index: int = 0):
