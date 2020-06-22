@@ -37,6 +37,9 @@ class QueueManager:
             queueable_data,
             cls.__QUEUES_BY_SPECIALTY[time_queue_name].index_of(queueable_data)
         )
+        # Notify all users of new position
+        for index, value in enumerate(cls.__QUEUES_BY_SPECIALTY[time_queue_name]):
+            await cls.__notify_single_affiliate(value, index)
 
     @classmethod
     async def pop(cls, specialties: List[str]) -> Optional[Consultation]:
@@ -73,6 +76,8 @@ class QueueManager:
                 cls.__QUEUES_BY_SPECIALTY[specialty] = await cls.__create_queue(specialty)
             cls.__QUEUES_BY_SPECIALTY[specialty].remove(queueable_data)
             await QueueDAO.remove(queueable_data.id)
+        # Notify everyone of their new position
+        Scheduler.run_in_millis(cls.__notify_affiliates)
 
     @classmethod
     async def __notify_affiliates(cls):
