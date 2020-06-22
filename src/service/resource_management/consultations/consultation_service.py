@@ -13,6 +13,7 @@ from src.model.doctors.doctor import Doctor
 from src.model.errors.business_error import BusinessError
 from src.service.notification_service import NotificationService
 from src.service.queue.queue_manager import QueueManager
+from src.utils.logging.logger import Logger
 
 
 class ConsultationService:
@@ -64,6 +65,7 @@ class ConsultationService:
         # Set socket ID and update
         consultation.socket_id = socket_id
         await ConsultationDAO.store(consultation)
+        Logger(cls.__name__).info(f'has socket: {has_socket}')
         if not has_socket: await QueueManager.enqueue(consultation)
 
     @classmethod

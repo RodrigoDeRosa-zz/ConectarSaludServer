@@ -6,6 +6,7 @@ from src.database.daos.queue_dao import QueueDAO
 from src.handlers.socket.socket_manager import SocketManager
 from src.model.consultations.consultation import Consultation, QueueableData
 from src.service.queue.consultation_queue import ConsultationQueue
+from src.utils.logging.logger import Logger
 
 
 class QueueManager:
@@ -22,6 +23,7 @@ class QueueManager:
         # Pediatrics should only be taken by a pediatrician
         queue_specialties = [cls.__PEDIATRICS] if cls.__PEDIATRICS in consultation.specialties\
             else set(consultation.specialties + [cls.__MAIN_QUEUE_ID])
+        Logger(cls.__name__).info(f'Queue specialties: {queue_specialties}')
         # Update every specialty's queue. Medicina general should always be included.
         for specialty in queue_specialties:
             # Create queue if not existent
@@ -33,6 +35,7 @@ class QueueManager:
         await QueueDAO.store(queueable_data)
         # Notify user approximate waiting time. Main queue is used for worst case scenario.
         time_queue_name = cls.__PEDIATRICS if cls.__PEDIATRICS in queue_specialties else cls.__MAIN_QUEUE_ID
+        Logger(cls.__name__).info(f'time queue name: {time_queue_name}')
         await cls.__notify_affiliates(time_queue_name)
 
     @classmethod
@@ -84,11 +87,13 @@ class QueueManager:
     @classmethod
     async def __notify_affiliates(cls, specialty: str, skips: int = 0):
         """ Send approximate remaining time to every affiliate via socket. """
+        Logger(cls.__name__).info(f'queue: {cls.__QUEUES_BY_SPECIALTY[specialty]}')
         for index, value in enumerate(cls.__QUEUES_BY_SPECIALTY[specialty]):
             await cls.__notify_single_affiliate(value, index + skips)
 
     @classmethod
     async def __notify_single_affiliate(cls, queueable_data: QueueableData, index: int = 0):
+        Logger(cls.__name__).info(f'notifying: {queueable_data.socket_id}')
         await SocketManager.notify_remaining_time(index * cls.CONSULTATION_MINUTES, queueable_data.socket_id)
 
     @classmethod
