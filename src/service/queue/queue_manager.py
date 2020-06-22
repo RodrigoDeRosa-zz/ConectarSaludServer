@@ -6,7 +6,6 @@ from src.database.daos.queue_dao import QueueDAO
 from src.handlers.socket.socket_manager import SocketManager
 from src.model.consultations.consultation import Consultation, QueueableData
 from src.service.queue.consultation_queue import ConsultationQueue
-from src.utils.scheduling.scheduler import Scheduler
 
 
 class QueueManager:
@@ -34,10 +33,7 @@ class QueueManager:
         await QueueDAO.store(queueable_data)
         # Notify user approximate waiting time. Main queue is used for worst case scenario.
         time_queue_name = cls.__PEDIATRICS if cls.__PEDIATRICS in queue_specialties else cls.__MAIN_QUEUE_ID
-        await cls.__notify_single_affiliate(
-            queueable_data,
-            cls.__QUEUES_BY_SPECIALTY[time_queue_name].index_of(queueable_data)
-        )
+        await cls.__notify_affiliates(time_queue_name)
 
     @classmethod
     async def pop(cls, specialties: List[str]) -> Optional[Consultation]:
@@ -60,7 +56,8 @@ class QueueManager:
             # Notify current affiliate that they're next
             await cls.__notify_single_affiliate(queueable_data)
             # Notify all enqueued affiliates of updated waiting time
-            Scheduler.run_in_millis(cls.__notify_affiliates)
+            queue_name = cls.__PEDIATRICS if cls.__PEDIATRICS in queueable_data.specialties else cls.__MAIN_QUEUE_ID
+            await cls.__notify_affiliates(queue_name)
             # Return related consultation object
             return await ConsultationDAO.find(queueable_data.id)
         
@@ -76,9 +73,9 @@ class QueueManager:
             await QueueDAO.remove(queueable_data.id)
 
     @classmethod
-    async def __notify_affiliates(cls):
+    async def __notify_affiliates(cls, specialty: str):
         """ Send approximate remaining time to every affiliate via socket. """
-        for index, value in enumerate(cls.__QUEUES_BY_SPECIALTY[cls.__MAIN_QUEUE_ID]):
+        for index, value in enumerate(cls.__QUEUES_BY_SPECIALTY[specialty]):
             await cls.__notify_single_affiliate(value, index + 1)
 
     @classmethod
