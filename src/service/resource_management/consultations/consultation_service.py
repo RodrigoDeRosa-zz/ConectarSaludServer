@@ -65,7 +65,6 @@ class ConsultationService:
         # Set socket ID and update
         consultation.socket_id = socket_id
         await ConsultationDAO.store(consultation)
-        Logger(cls.__name__).info(f'has socket: {has_socket}')
         if not has_socket: await QueueManager.enqueue(consultation)
 
     @classmethod
