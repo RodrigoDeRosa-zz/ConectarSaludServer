@@ -70,14 +70,21 @@ class QueueManager:
     async def cancel(cls, consultation: Consultation):
         """ Removes a consultation from the queue. """
         queueable_data = cls.__to_queueable_data(consultation)
-        for specialty in set(queueable_data.specialties + [cls.__MAIN_QUEUE_ID]):
+        # Main queue id should only be added if the specialty is not pediatrics
+        queue_specialties = [cls.__PEDIATRICS] if cls.__PEDIATRICS in consultation.specialties \
+            else set(consultation.specialties + [cls.__MAIN_QUEUE_ID])
+        # Remove from all specialties
+        for specialty in queue_specialties:
             # Load queue if not existent in memory
             if specialty not in cls.__QUEUES_BY_SPECIALTY:
                 cls.__QUEUES_BY_SPECIALTY[specialty] = await cls.__create_queue(specialty)
+            # Remove data from
             cls.__QUEUES_BY_SPECIALTY[specialty].remove(queueable_data)
             await QueueDAO.remove(queueable_data.id)
         # Notify everyone of their new position
-        Scheduler.run_in_millis(cls.__notify_affiliates)
+        time_queue_name = cls.__PEDIATRICS if cls.__PEDIATRICS in queue_specialties else cls.__MAIN_QUEUE_ID
+        for index, value in enumerate(cls.__QUEUES_BY_SPECIALTY[time_queue_name]):
+            await cls.__notify_single_affiliate(value, index)
 
     @classmethod
     async def __notify_affiliates(cls):
