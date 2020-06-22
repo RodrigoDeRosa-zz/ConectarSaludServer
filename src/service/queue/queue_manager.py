@@ -68,7 +68,7 @@ class QueueManager:
         # Check if we should analyze main queue or only pediatrics
         specialties_with_main = set(queueable_data.specialties + [cls.__MAIN_QUEUE_ID])
         specialties_to_clean = specialties_with_main if cls.__PEDIATRICS not in queueable_data.specialties \
-            else set(cls.__PEDIATRICS)
+            else [cls.__PEDIATRICS]
         # Remove from all specialties
         for specialty in specialties_to_clean:
             # Load queue if not existent in memory
