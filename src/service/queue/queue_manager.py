@@ -6,7 +6,6 @@ from src.database.daos.queue_dao import QueueDAO
 from src.handlers.socket.socket_manager import SocketManager
 from src.model.consultations.consultation import Consultation, QueueableData
 from src.service.queue.consultation_queue import ConsultationQueue
-from src.utils.scheduling.scheduler import Scheduler
 
 
 class QueueManager:
@@ -22,7 +21,7 @@ class QueueManager:
         # Pediatrics should only be taken by a pediatrician
         queue_specialties = [cls.__PEDIATRICS] if cls.__PEDIATRICS in consultation.specialties \
             else set(consultation.specialties + [cls.__MAIN_QUEUE_ID])
-        # Update every specialty's queue. Medicina general should always be included.
+        # Update every specialty's queue.
         for specialty in queue_specialties:
             # Create queue if not existent
             if specialty not in cls.__QUEUES_BY_SPECIALTY:
@@ -31,15 +30,9 @@ class QueueManager:
             cls.__QUEUES_BY_SPECIALTY[specialty].enqueue(queueable_data)
         # Persist in DB
         await QueueDAO.store(queueable_data)
-        # Notify user approximate waiting time. Main queue is used for worst case scenario.
+        # Notify all users of new position. Main queue is used for worst case scenario.
         time_queue_name = cls.__PEDIATRICS if cls.__PEDIATRICS in queue_specialties else cls.__MAIN_QUEUE_ID
-        await cls.__notify_single_affiliate(
-            queueable_data,
-            cls.__QUEUES_BY_SPECIALTY[time_queue_name].index_of(queueable_data)
-        )
-        # Notify all users of new position
-        for index, value in enumerate(cls.__QUEUES_BY_SPECIALTY[time_queue_name]):
-            await cls.__notify_single_affiliate(value, index)
+        await cls.__notify_affiliates(time_queue_name)
 
     @classmethod
     async def pop(cls, specialties: List[str]) -> Optional[Consultation]:
@@ -55,14 +48,19 @@ class QueueManager:
             if not queueable_data: continue
             # Remove event from database
             await QueueDAO.remove(queueable_data.id)
+            # Specialties should not have main id if it's pediatrics
+            sub_specialties = [cls.__PEDIATRICS] if cls.__PEDIATRICS in queueable_data.specialties \
+                else set(queueable_data.specialties + [cls.__MAIN_QUEUE_ID])
             # Remove event from all of it's specialties queues
-            for sub_specialty in set(queueable_data.specialties + [cls.__MAIN_QUEUE_ID]):
+            for sub_specialty in sub_specialties:
                 if sub_specialty == specialty: continue
                 cls.__QUEUES_BY_SPECIALTY[sub_specialty].remove(queueable_data)
             # Notify current affiliate that they're next
             await cls.__notify_single_affiliate(queueable_data)
-            # Notify all enqueued affiliates of updated waiting time
-            Scheduler.run_in_millis(cls.__notify_affiliates)
+            # Notify all enqueued affiliates of updated waiting time.
+            # If current specialty is pediatrics then only notify that queue
+            if specialty == cls.__PEDIATRICS: await cls.__notify_affiliates(specialty, 1)
+            else: await cls.__notify_affiliates()
             # Return related consultation object
             return await ConsultationDAO.find(queueable_data.id)
 
@@ -83,14 +81,14 @@ class QueueManager:
             await QueueDAO.remove(queueable_data.id)
         # Notify everyone of their new position
         time_queue_name = cls.__PEDIATRICS if cls.__PEDIATRICS in queue_specialties else cls.__MAIN_QUEUE_ID
-        for index, value in enumerate(cls.__QUEUES_BY_SPECIALTY[time_queue_name]):
-            await cls.__notify_single_affiliate(value, index)
+        await cls.__notify_affiliates(time_queue_name)
 
     @classmethod
-    async def __notify_affiliates(cls):
+    async def __notify_affiliates(cls, queue_name: str = None, jumps: int = 0):
         """ Send approximate remaining time to every affiliate via socket. """
-        for index, value in enumerate(cls.__QUEUES_BY_SPECIALTY[cls.__MAIN_QUEUE_ID]):
-            await cls.__notify_single_affiliate(value, index + 1)
+        name = queue_name if queue_name is not None else cls.__MAIN_QUEUE_ID
+        for index, value in enumerate(cls.__QUEUES_BY_SPECIALTY[name]):
+            await cls.__notify_single_affiliate(value, index + jumps)
 
     @classmethod
     async def __notify_single_affiliate(cls, queueable_data: QueueableData, index: int = 0):
