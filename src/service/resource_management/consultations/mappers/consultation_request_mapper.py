@@ -6,10 +6,11 @@ class ConsultationRequestMapper:
 
     @staticmethod
     def map(request_body: dict) -> ConsultationDTO:
-        if 'symptoms' not in request_body:
-            raise BusinessError(f'Invalid request. Missing field "symptoms".', 400)
+        for field in ['patient_dni', 'symptoms']:
+            if field not in request_body:
+                raise BusinessError(f'Invalid request. Missing field "{field}".', 400)
         return ConsultationDTO(
             symptoms=request_body['symptoms'],
-            reason=request_body.get('reason'),
-            patient_dni=request_body.get('patient_dni')
+            patient_dni=request_body['patient_dni'],
+            reason=request_body.get('reason')
         )

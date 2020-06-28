@@ -42,20 +42,17 @@ class Consultation:
     indications: str = None
     socket_id: str = None
     # Used for priority calculation
-    affiliate: Affiliate = None
+    patient: Affiliate = None
     # Used for post construct control
     retrieval: bool = False
 
     def __post_init__(self):
         """ Resolve priority and specialty based on the received information. """
         if self.retrieval: return
-        self.affiliate_dni = self.affiliate.dni
-        # TODO -> Replace this for the patient's id
-        self.patient_dni = self.affiliate_dni
-        # TODO -> Sex and age. This should depend on the consultation's "patient" instead of affiliate
-        self.specialties = SpecialtyResolver.resolve(self.symptoms, self.affiliate.sex, self.affiliate.age)
+        self.patient_dni = self.patient.dni
+        self.specialties = SpecialtyResolver.resolve(self.symptoms, self.patient.sex, self.patient.age)
         # Resolve priority based on symptoms and affiliate plan
-        self.priority = PriorityResolver.resolve(self.symptoms, self.affiliate.plan, self.affiliate.age)
+        self.priority = PriorityResolver.resolve(self.symptoms, self.patient.plan, self.patient.age)
 
 
 @dataclass

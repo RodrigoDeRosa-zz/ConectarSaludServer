@@ -13,7 +13,6 @@ from src.model.doctors.doctor import Doctor
 from src.model.errors.business_error import BusinessError
 from src.service.notification_service import NotificationService
 from src.service.queue.queue_manager import QueueManager
-from src.utils.logging.logger import Logger
 
 
 class ConsultationService:
@@ -21,10 +20,14 @@ class ConsultationService:
     @classmethod
     async def create_for_affiliate(cls, affiliate_dni: str, consultation_data: ConsultationDTO) -> Consultation:
         """ Creates a new consultation for the given affiliate and returns it's id. """
-        # TODO -> We'll also need the "patient"
+        # Get petitioner object
         affiliate = await AffiliateDAO.find(affiliate_dni)
         if not affiliate:
             raise BusinessError(f'There is no affiliate with DNI {affiliate_dni}.', 404)
+        # Get patient object
+        patient = await AffiliateDAO.find(consultation_data.patient_dni)
+        if not patient:
+            raise BusinessError(f'There is no affiliate with DNI {patient.dni}.', 404)
         # If there is an ongoing call, return it's id
         consultation = await ConsultationDAO.affiliate_required_consultation(affiliate_dni)
         if consultation: return consultation
@@ -32,7 +35,8 @@ class ConsultationService:
         consultation_id = str(uuid.uuid4())
         consultation = Consultation(
             id=consultation_id,
-            affiliate=affiliate,
+            affiliate_dni=affiliate_dni,
+            patient=patient,
             symptoms=ast.literal_eval(consultation_data.symptoms),
             reason=consultation_data.reason,
             patient_dni=consultation_data.patient_dni
