@@ -1,5 +1,6 @@
 from typing import List
 
+from src.database.daos.affiliate_dao import AffiliateDAO
 from src.model.affiliates.affiliate import Affiliate
 from src.model.consultations.consultation import Consultation
 from src.model.doctors.doctor import Doctor
@@ -8,15 +9,19 @@ from src.model.doctors.doctor import Doctor
 class ConsultationResponseMapper:
 
     @staticmethod
-    def map_consultation_list(consultations: List[Consultation], doctors: List[Doctor]) -> List[dict]:
+    async def map_consultation_list(consultations: List[Consultation], doctors: List[Doctor]) -> List[dict]:
         response = list()
         for consultation, doctor in zip(consultations, doctors):
+            patient = await AffiliateDAO.find(consultation.patient_dni)
             response.append(
                 {
                     'consultation_id': consultation.id,
                     'doctor_first_name': doctor.first_name,
                     'doctor_last_name': doctor.last_name,
                     'doctor_specialties': doctor.specialties,
+                    'patient_first_name': patient.first_name,
+                    'patient_last_name': patient.last_name,
+                    'patient_dni': patient.dni,
                     'date': consultation.creation_date.strftime('%d-%m-%Y %H:%M:%S')
                 }
             )
@@ -50,6 +55,7 @@ class ConsultationResponseMapper:
             'date': consultation.creation_date.strftime('%d-%m-%Y %H:%M:%S'),
             'patient_first_name': patient.first_name,
             'patient_last_name': patient.last_name,
+            'patient_dni': patient.dni,
             'doctor_first_name': doctor.first_name,
             'doctor_last_name': doctor.last_name,
             'doctor_specialties': doctor.specialties,

@@ -48,10 +48,10 @@ class AffiliateConsultationManagementHandler(CustomRequestHandler):
         """ Returns relevant information for the affiliate about the consultation. """
         if not consultation_id:
             consultations, doctors = await ConsultationService.all_consultations(affiliate_dni)
-            self.make_response(ConsultationResponseMapper.map_consultation_list(consultations, doctors))
+            self.make_response(await ConsultationResponseMapper.map_consultation_list(consultations, doctors))
         else:
-            consultation, doctor, affiliate = await ConsultationService.affiliate_consultation(
+            consultation, doctor, patient = await ConsultationService.affiliate_consultation(
                 affiliate_dni,
                 consultation_id
             )
-            self.make_response(ConsultationResponseMapper.map_for_affiliate(consultation, doctor, affiliate))
+            self.make_response(ConsultationResponseMapper.map_for_affiliate(consultation, doctor, patient))
