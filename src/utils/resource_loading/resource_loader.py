@@ -54,7 +54,14 @@ class ResourceLoader:
             users = load(fd)
         # Add every user to the database
         for user in users:
-            await AuthenticationDAO.add(AuthData(user_id=user['user_id'], password=user['password'], role=user['role']))
+            await AuthenticationDAO.add(
+                AuthData(
+                    user_id=user['user_id'],
+                    password=user['password'],
+                    role=user['role'],
+                    device_id=''
+                )
+            )
 
     @classmethod
     async def __load_doctors(cls):
@@ -88,6 +95,7 @@ class ResourceLoader:
                     last_name=affiliate['last_name'],
                     plan=affiliate['plan'],
                     sex=affiliate['sex'],
-                    age=affiliate['age']
+                    age=affiliate['age'],
+                    device_id=''
                 )
             )
