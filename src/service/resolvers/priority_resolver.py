@@ -13,23 +13,24 @@ class PriorityResolver(Resolver):
     DEFAULT_PRIORITY = 0
 
     @classmethod
-    def resolve(cls, symptoms: List[str], plan: str) -> int:
+    def resolve(cls, symptoms: List[str], plan: str, age: int) -> int:
         """ Resolves a particular consultation's priority. """
-        return cls.resolve_symptoms(symptoms) + cls.resolve_plan(plan)
+        return cls.resolve_symptoms(symptoms, age) + cls.resolve_plan(plan)
 
     @classmethod
-    def resolve_symptoms(cls, symptoms: List[str]) -> int:
+    def resolve_symptoms(cls, symptoms: List[str], age: int) -> int:
         """ Returns a priority level based on the received symptoms. """
         priorities = list()
         for symptom in symptoms:
             alpha, beta = cls.create_memories()
-            alpha.update_knowledge({'symptom': symptom})
+            alpha.update_knowledge({'symptom': symptom, 'age': age})
             # Check for results
-            if (result := alpha.evaluate()) or (result := beta.evaluate()):
-                priorities.append(result[0].result_object['priority_level'])
+            if (results := alpha.evaluate()) or (results := beta.evaluate()):
+                for result in results:
+                    priorities.append(result.result_object['priority_level'])
         if not priorities: return cls.DEFAULT_PRIORITY
-        # Return the maximum priority value
-        return max(priorities)
+        # Return the sum of priority results
+        return sum(priorities)
 
     @classmethod
     def resolve_plan(cls, plan: str) -> int:

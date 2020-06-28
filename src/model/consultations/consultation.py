@@ -55,7 +55,7 @@ class Consultation:
         # TODO -> Sex and age. This should depend on the consultation's "patient" instead of affiliate
         self.specialties = SpecialtyResolver.resolve(self.symptoms, self.affiliate.sex, self.affiliate.age)
         # Resolve priority based on symptoms and affiliate plan
-        self.priority = PriorityResolver.resolve(self.symptoms, self.affiliate.plan)
+        self.priority = PriorityResolver.resolve(self.symptoms, self.affiliate.plan, self.affiliate.age)
 
 
 @dataclass

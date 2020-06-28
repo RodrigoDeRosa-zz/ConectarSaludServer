@@ -1,4 +1,5 @@
 from src.rete.model.operations.equals import Equals
+from src.rete.model.operations.greater_than_equal import GreaterThanEqual
 from src.rete.model.operations.includes import Includes
 from src.rete.model.operations.less_than import LessThan
 from src.rete.model.operations.operation import Operation
@@ -26,6 +27,8 @@ class Condition:
             self.operation = Includes()
         elif operation == 'lt':
             self.operation = LessThan()
+        elif operation == 'gte':
+            self.operation = GreaterThanEqual()
         return self
 
     def apply_to(self, knowledge: dict):

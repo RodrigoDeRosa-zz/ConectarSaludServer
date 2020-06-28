@@ -17,12 +17,29 @@
           "operation": "in"
         }
       ],
+      "output": "Urgent Priority"
+    },
+    {
+      "id": "Old Age",
+      "conditions": [
+        {
+          "field": "age",
+          "value": 70,
+          "operation": "gte"
+        }
+      ],
       "output": "High Priority"
     }
   ],
   "outputs": [
     {
       "id": "High Priority",
+      "object": {
+        "priority_level": 1
+      }
+    },
+    {
+      "id": "Urgent Priority",
       "object": {
         "priority_level": 2
       }
