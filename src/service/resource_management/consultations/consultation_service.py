@@ -111,8 +111,8 @@ class ConsultationService:
         # Notify start of call to affiliate via push notification
         affiliate = await AffiliateDAO.find(consultation.affiliate_dni)
         # TODO -> This if shouldn't be necessary, but it'll be here temporarily to avoid bugs
-        #if affiliate.device_id:
-        #    NotificationService.notify_call_start(affiliate.device_id, doctor.last_name, affiliate.first_name)
+        if affiliate.device_id:
+            NotificationService.notify_call_start(affiliate.device_id, doctor.last_name, affiliate.first_name)
         # Update consultation with new call id and IN_PROGRESS status
         consultation.status = ConsultationStatus.IN_PROGRESS
         consultation.call_id = call_id
