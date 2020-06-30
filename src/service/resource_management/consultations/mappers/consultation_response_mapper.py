@@ -27,6 +27,23 @@ class ConsultationResponseMapper:
             )
         return response
 
+    @staticmethod
+    def map_doctor_consultation_list(consultations: List[Consultation], patients: List[Affiliate]) -> List[dict]:
+        response = list()
+        for consultation, patient in zip(consultations, patients):
+            response.append(
+                {
+                    'consultation_id': consultation.id,
+                    'patient_first_name': patient.first_name,
+                    'patient_last_name': patient.last_name,
+                    'patient_plan': patient.plan,
+                    'patient_id': patient.id,
+                    'patient_dni': patient.dni,
+                    'date': consultation.creation_date.strftime('%d-%m-%Y %H:%M:%S')
+                }
+            )
+        return response
+
     @classmethod
     def map_consultation(cls, consultation: Consultation) -> dict:
         response = {'consultation_id': consultation.id}
@@ -48,6 +65,18 @@ class ConsultationResponseMapper:
         response['symptoms'] = consultation.symptoms
         response['reason'] = consultation.reason
         return response
+
+    @staticmethod
+    def map_doctor_consultation(consultation: Consultation, patient: Affiliate) -> dict:
+        return {
+            'date': consultation.creation_date.strftime('%d-%m-%Y %H:%M:%S'),
+            'patient_first_name': patient.first_name,
+            'patient_last_name': patient.last_name,
+            'patient_dni': patient.dni,
+            'symptoms': consultation.symptoms,
+            'has_prescription': consultation.prescription is not None,
+            'indications': consultation.indications
+        }
 
     @staticmethod
     def map_for_affiliate(consultation: Consultation, doctor: Doctor, patient: Affiliate) -> dict:

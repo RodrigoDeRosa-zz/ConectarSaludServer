@@ -111,8 +111,8 @@ class ConsultationService:
         # Notify start of call to affiliate via push notification
         affiliate = await AffiliateDAO.find(consultation.affiliate_dni)
         # TODO -> This if shouldn't be necessary, but it'll be here temporarily to avoid bugs
-        if affiliate.device_id:
-            NotificationService.notify_call_start(affiliate.device_id, doctor.last_name, affiliate.first_name)
+        #if affiliate.device_id:
+        #    NotificationService.notify_call_start(affiliate.device_id, doctor.last_name, affiliate.first_name)
         # Update consultation with new call id and IN_PROGRESS status
         consultation.status = ConsultationStatus.IN_PROGRESS
         consultation.call_id = call_id
@@ -130,6 +130,24 @@ class ConsultationService:
         consultation = await cls.__get_affiliate_consultation(affiliate_dni, consultation_id)
         # Check that the consultation belongs to the affiliate
         if not consultation.affiliate_dni == affiliate_dni:
+            raise BusinessError(f'Failed to match affiliate DNI to consultation ID.', 400)
+        # Get consultation doctor
+        doctor = await DoctorDAO.find_by_id(consultation.doctor_id)
+        # Get consultation patient
+        patient = await AffiliateDAO.find(consultation.patient_dni)
+        # Return both objects for mapping
+        return consultation, doctor, patient
+
+    @classmethod
+    async def doctor_consultation(
+            cls,
+            doctor_id: str,
+            consultation_id: str
+    ) -> Tuple[Consultation, Doctor, Affiliate]:
+        """ Get consultation and check if doctor and consultation are related. """
+        consultation = await cls.__get_doctor_consultation(doctor_id, consultation_id)
+        # Check that the consultation belongs to the affiliate
+        if not consultation.doctor_id == doctor_id:
             raise BusinessError(f'Failed to match affiliate DNI to consultation ID.', 400)
         # Get consultation doctor
         doctor = await DoctorDAO.find_by_id(consultation.doctor_id)
@@ -170,6 +188,21 @@ class ConsultationService:
         consultations = await ConsultationDAO.all_affiliate_consultations(affiliate_dni)
         doctors = [await DoctorDAO.find_by_id(consultation.doctor_id) for consultation in consultations]
         return consultations, doctors
+
+    @classmethod
+    async def doctor_consultation_data(cls, doctor_id: str, consultation_id: str) -> Tuple[Consultation, Affiliate]:
+        """ Returns the information about an specific consultation. """
+        consultation = await cls.__get_doctor_consultation(doctor_id, consultation_id)
+        return consultation, await AffiliateDAO.find(consultation.patient_dni)
+
+    @classmethod
+    async def get_doctor_consultations(cls, doctor_id: str) -> Tuple[List[Consultation], List[Affiliate]]:
+        """ Returns all finished consultation of the given doctor. """
+        if not await DoctorDAO.find_by_id(doctor_id):
+            raise BusinessError(f'There is no doctor with ID {doctor_id}.', 404)
+        consultations = await ConsultationDAO.all_doctor_consultations(doctor_id)
+        affiliates = [await AffiliateDAO.find(consultation.patient_dni) for consultation in consultations]
+        return consultations, affiliates
 
     @classmethod
     async def __get_affiliate_consultation(cls, affiliate_dni: str, consultation_id: str) -> Consultation:

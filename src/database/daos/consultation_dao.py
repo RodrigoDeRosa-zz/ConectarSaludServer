@@ -53,6 +53,15 @@ class ConsultationDAO(GenericDAO):
         return [cls.__to_object(document) for document in documents]
 
     @classmethod
+    async def all_doctor_consultations(cls, doctor_id: str) -> List[Consultation]:
+        """ Retrieve all of the finished consultations for the given doctor. """
+        documents = await cls.get_sorted(
+            {'status': ConsultationStatus.FINISHED.value, 'doctor_id': doctor_id},
+            sort_list=[('creation_date', pymongo.DESCENDING)]
+        )
+        return [cls.__to_object(document) for document in documents]
+
+    @classmethod
     async def next_consultation_waiting_call(cls, doctor_id: str) -> Consultation:
         """ Returns consultation waiting call for given doctor if it exists. """
         document = await cls.get_first({'doctor_id': doctor_id, 'status': ConsultationStatus.WAITING_CALL.value})

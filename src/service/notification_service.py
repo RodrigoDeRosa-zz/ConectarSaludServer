@@ -5,7 +5,7 @@ from pyfcm import FCMNotification
 
 class NotificationService:
 
-    notifier = FCMNotification(api_key=os.environ.get('FIREBASE_API_KEY'))
+    notifier = None  # FCMNotification(api_key=os.environ.get('FIREBASE_API_KEY'))
     __MESSAGE_TITLE = 'Tu médico está listo!'
 
     @classmethod
