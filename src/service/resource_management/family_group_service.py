@@ -11,7 +11,7 @@ class FamilyGroupService:
         """ Retrieve the given affiliate's family group. """
         family_group = []
         families = await FamilyGroupDAO.all()
-        for member_dni in next(list(filter(lambda members: affiliate_dni in members, families)), []):
+        for member_dni in next(filter(lambda members: affiliate_dni in members, families), []):
             affiliate = await AffiliateDAO.find(member_dni)
             family_group.append(
                 {
