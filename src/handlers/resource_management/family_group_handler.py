@@ -13,4 +13,4 @@ class FamilyGroupHandler(CustomRequestHandler):
     """ Handling methods """
 
     async def __get_family_group(self, affiliate_dni):
-        self.make_response(await FamilyGroupService.get_family_group(str(affiliate_dni)))
+        self.make_response(await FamilyGroupService.get_family_group(affiliate_dni))
