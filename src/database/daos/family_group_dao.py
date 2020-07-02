@@ -9,7 +9,7 @@ class FamilyGroupDAO(GenericDAO):
     @classmethod
     async def find(cls, affiliate_dni: str) -> List[str]:
         """ Return the family group of the given affiliate. """
-        document = await cls.get_first({'members': {'$elemMatch': affiliate_dni}})
+        document = await cls.get_first({'members': {'$elemMatch': {'eq': affiliate_dni}}})
         # Get instance directly from its name
         return None if not document else document.get('members', list())
 
