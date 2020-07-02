@@ -10,7 +10,8 @@ class FamilyGroupService:
     async def get_family_group(cls, affiliate_dni: str) -> List[dict]:
         """ Retrieve the given affiliate's family group. """
         family_group = []
-        for member_dni in (await FamilyGroupDAO.all())[0]:
+        families = await FamilyGroupDAO.all()
+        for member_dni in next(list(filter(lambda members: affiliate_dni in members, families)), []):
             affiliate = await AffiliateDAO.find(member_dni)
             family_group.append(
                 {

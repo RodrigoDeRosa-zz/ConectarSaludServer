@@ -7,13 +7,6 @@ from src.database.mongo import Mongo
 class FamilyGroupDAO(GenericDAO):
 
     @classmethod
-    async def find(cls, affiliate_dni: str) -> List[str]:
-        """ Return the family group of the given affiliate. """
-        document = await cls.get_first({'members': {'$elemMatch': {'eq': affiliate_dni}}})
-        # Get instance directly from its name
-        return None if not document else document.get('members', list())
-
-    @classmethod
     async def all(cls) -> List[str]:
         """ Returns all family groups stored in the database. """
         documents = await cls.get_all()
