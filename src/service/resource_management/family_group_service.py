@@ -7,7 +7,7 @@ from src.database.daos.family_group_dao import FamilyGroupDAO
 class FamilyGroupService:
 
     @classmethod
-    def get_family_group(cls, affiliate_dni: str) -> List[dict]:
+    async def get_family_group(cls, affiliate_dni: str) -> List[dict]:
         """ Retrieve the given affiliate's family group. """
         family_group = []
         for member_dni in await FamilyGroupDAO.find(affiliate_dni):
