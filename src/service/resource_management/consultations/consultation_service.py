@@ -128,9 +128,6 @@ class ConsultationService:
     ) -> Tuple[Consultation, Doctor, Affiliate]:
         """ Get consultation and check if affiliate and consultation are related. """
         consultation = await cls.__get_affiliate_consultation(affiliate_dni, consultation_id)
-        # Check that the consultation belongs to the affiliate
-        if not consultation.affiliate_dni == affiliate_dni:
-            raise BusinessError(f'Failed to match affiliate DNI to consultation ID.', 400)
         # Get consultation doctor
         doctor = await DoctorDAO.find_by_id(consultation.doctor_id)
         # Get consultation patient
@@ -148,7 +145,7 @@ class ConsultationService:
         consultation = await cls.__get_doctor_consultation(doctor_id, consultation_id)
         # Check that the consultation belongs to the affiliate
         if not consultation.doctor_id == doctor_id:
-            raise BusinessError(f'Failed to match affiliate DNI to consultation ID.', 400)
+            raise BusinessError(f'Failed to match affiliate DNI to consultation ID.', 404)
         # Get consultation doctor
         doctor = await DoctorDAO.find_by_id(consultation.doctor_id)
         # Get consultation patient
