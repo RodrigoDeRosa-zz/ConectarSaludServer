@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pymongo
 from typing import List, Optional
@@ -65,7 +65,10 @@ class ConsultationDAO(GenericDAO):
         # Build query from parameters
         query = {'status': ConsultationStatus.FINISHED.value, 'creation_date': {'$gte': from_date}}
         if doctor_id: query['doctor_id'] = doctor_id
-        if to_date: query['creation_date'] = {'$lte': to_date, '$gte': from_date}
+        if to_date: query['creation_date'] = {
+            '$lte': to_date + timedelta(hours=23, minutes=59, seconds=59),
+            '$gte': from_date
+        }
         if specialty: query['specialties'] = specialty
         # Retrieve data
         documents = await cls.get_sorted(query, sort_list=[('creation_date', pymongo.ASCENDING)])
