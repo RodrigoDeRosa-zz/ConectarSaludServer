@@ -44,7 +44,7 @@ class ScoreStatisticsService:
             {
                 'score': consultation.score,
                 'opinion': consultation.score_opinion,
-                'date': datetime.combine(consultation.creation_date.date(), datetime.min.time())
+                'date': consultation.creation_date.strftime('%d-%m-%Y')
             }
             for consultation in consultations
         ]
