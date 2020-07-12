@@ -12,6 +12,8 @@ class SpecialtyStatisticsService:
         # Count consultations by specialty
         by_specialty = dict()
         for consultation in consultations:
+            if len(consultation.specialties) > 1 and 'Medicina general' in consultation.specialties:
+                consultation.specialties.remove('Medicina general')
             specialty = consultation.specialties[0]
             by_specialty[specialty] = by_specialty.get(specialty, 0) + 1
         # Map to API model
