@@ -12,8 +12,8 @@ class SpecialtyStatisticsService:
         # Count consultations by specialty
         by_specialty = dict()
         for consultation in consultations:
-            for specialty in consultation.specialties:
-                by_specialty[specialty] = by_specialty.get(specialty, 0) + 1
+            specialty = consultation.specialties[0]
+            by_specialty[specialty] = by_specialty.get(specialty, 0) + 1
         # Map to API model
         return {
             'total': len(consultations),
