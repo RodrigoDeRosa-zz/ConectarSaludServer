@@ -28,7 +28,7 @@ class ScoreStatisticsService:
     @classmethod
     async def __get_scoring_data(cls, doctor_id, from_date, to_date, specialty):
         # Retrieve consultations
-        consultations = await ConsultationDAO.finished_consultations_score(doctor_id, from_date, to_date, specialty)
+        consultations = await ConsultationDAO.finished_consultations(from_date, doctor_id, to_date, specialty)
         # Group consultations by date
         score_by_date = dict()
         for consultation in consultations:

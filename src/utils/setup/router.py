@@ -13,6 +13,7 @@ from src.handlers.resource_management.doctor_prescription_management_handler imp
 from src.handlers.resource_management.family_group_handler import FamilyGroupHandler
 from src.handlers.socket.socket_manager import SocketManager
 from src.handlers.statistics.score_statistics_handler import ScoreStatisticsHandler
+from src.handlers.statistics.specialty_statistics_handler import SpecialtyStatisticsHandler
 from src.handlers.symptoms_handler import SymptomsHandler
 from src.handlers.utils.collection_cleaning_handler import CollectionCleaningHandler
 
@@ -35,6 +36,7 @@ class Router:
         '/affiliates/(?P<affiliate_dni>[^/]+)/active-consultations': ActiveConsultationHandler,
         '/affiliates/(?P<affiliate_dni>[^/]+)/family': FamilyGroupHandler,
         '/statistics/scores': ScoreStatisticsHandler,
+        '/statistics/specialties': SpecialtyStatisticsHandler,
         '/utils/collections/clear/(?P<collection_name>[^/]+)': CollectionCleaningHandler,
         '/symptoms': SymptomsHandler,
         r'/socket.io/': SocketManager.handler()

@@ -55,12 +55,12 @@ class ConsultationDAO(GenericDAO):
         return [cls.__to_object(document) for document in documents]
 
     @classmethod
-    async def finished_consultations_score(
+    async def finished_consultations(
             cls,
-            doctor_id: Optional[str],
             from_date: datetime,
-            to_date: datetime,
-            specialty: str
+            doctor_id: Optional[str] = None,
+            to_date: Optional[datetime] = None,
+            specialty: Optional[str] = None
     ) -> List[Consultation]:
         # Build query from parameters
         query = {'status': ConsultationStatus.FINISHED.value, 'creation_date': {'$gte': from_date}}
