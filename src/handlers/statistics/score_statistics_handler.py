@@ -19,7 +19,7 @@ class ScoreStatisticsHandler(CustomRequestHandler):
         # If there is no from_date, we get all consultations
         from_date = datetime.min if not from_date else datetime.strptime(from_date, '%d-%m-%Y')
         to_date = self.get_argument('to_date', None)
-        to_date = None if not to_date else datetime.strptime(from_date, '%d-%m-%Y')
+        to_date = None if not to_date else datetime.strptime(to_date, '%d-%m-%Y')
         specialty = self.get_argument('specialty', None)
         # Retrieve statistics
         score_list, detail = await ScoreStatisticsService.get_statistics(doctor_id, from_date, to_date, specialty)
