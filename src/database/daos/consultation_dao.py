@@ -1,5 +1,7 @@
+from datetime import datetime
+
 import pymongo
-from typing import List
+from typing import List, Optional
 
 from src.database.daos.generic_dao import GenericDAO
 from src.database.mongo import Mongo
@@ -50,6 +52,23 @@ class ConsultationDAO(GenericDAO):
              ]},
             sort_list=[('creation_date', pymongo.DESCENDING)]
         )
+        return [cls.__to_object(document) for document in documents]
+
+    @classmethod
+    async def finished_consultations_score(
+            cls,
+            doctor_id: Optional[str],
+            from_date: datetime,
+            to_date: datetime,
+            specialty: str
+    ) -> List[Consultation]:
+        # Build query from parameters
+        query = {'status': ConsultationStatus.FINISHED.value, 'creation_date': {'$lte': from_date}}
+        if doctor_id: query['doctor_id'] = doctor_id
+        if to_date: query['creation_date'] = {'$gte': to_date}
+        if specialty: query['specialties'] = specialty
+        # Retrieve data
+        documents = await cls.get_sorted(query, sort_list=[('creation_date', pymongo.ASCENDING)])
         return [cls.__to_object(document) for document in documents]
 
     @classmethod
